@@ -1549,7 +1549,6 @@ async function shareDetailResult() {
       await navigator.share({
         files: [file],
         title: '트이다 수학 선택 나침반 상세 결과',
-        text: '나에게 더 잘 맞는 선택 과목 결과를 확인해봤어.'
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
@@ -1572,7 +1571,6 @@ async function shareStoryCard() {
       await navigator.share({
         files: [file],
         title: '트이다 수학 선택 나침반',
-        text: '내 수학 성향 타입을 확인해봤어.'
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
@@ -1602,7 +1600,6 @@ async function shareResult() {
       await navigator.share({
         files: [file],
         title: '트이다 수학 선택 나침반',
-        text: '나에게 더 잘 맞는 선택 과목은?'
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
