@@ -217,9 +217,11 @@
     transition: all 0.15s;
     position: relative;
   }
-  .subject-card:hover {
-    border-color: #185fa5;
-    background: #f0f5fb;
+  @media (hover: hover) and (pointer: fine) {
+    .subject-card:hover {
+      border-color: #185fa5;
+      background: #f0f5fb;
+    }
   }
   .subject-card.selected {
     border-color: #185fa5;
