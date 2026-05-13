@@ -1233,12 +1233,54 @@ async function createResultImageBlob() {
   // 버튼 영역은 이미지에 나오지 않도록 잠시 숨김
   if (actions) actions.style.display = 'none';
 
+  // 결과 카드 애니메이션 때문에 일부 카드가 투명하게 캡처되는 현상 방지
+  const animatedEls = target.querySelectorAll('.result-card, .q-text, .answer-btn');
+  const originalAnimations = [];
+  animatedEls.forEach(el => {
+    originalAnimations.push({
+      el: el,
+      animation: el.style.animation,
+      opacity: el.style.opacity,
+      transform: el.style.transform
+    });
+    el.style.animation = 'none';
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
+
+  // 모바일에서 화면에 보이는 부분만 잘리는 현상을 막기 위해 전체 높이를 강제로 계산
+  const originalOverflow = target.style.overflow;
+  const originalHeight = target.style.height;
+  const originalMinHeight = target.style.minHeight;
+
+  target.style.overflow = 'visible';
+  target.style.height = 'auto';
+  target.style.minHeight = 'auto';
+
+  const rect = target.getBoundingClientRect();
+  const width = Math.ceil(target.scrollWidth || rect.width);
+  const height = Math.ceil(target.scrollHeight || rect.height);
+
   const canvas = await html2canvas(target, {
     backgroundColor: '#ffffff',
     scale: 2,
     useCORS: true,
-    windowWidth: target.scrollWidth,
-    windowHeight: target.scrollHeight
+    width: width,
+    height: height,
+    windowWidth: width,
+    windowHeight: height,
+    scrollX: 0,
+    scrollY: -window.scrollY
+  });
+
+  target.style.overflow = originalOverflow;
+  target.style.height = originalHeight;
+  target.style.minHeight = originalMinHeight;
+
+  originalAnimations.forEach(item => {
+    item.el.style.animation = item.animation;
+    item.el.style.opacity = item.opacity;
+    item.el.style.transform = item.transform;
   });
 
   if (actions) actions.style.display = '';
