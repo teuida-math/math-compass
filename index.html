@@ -15,95 +15,9 @@
     min-height: 100vh;
   }
 
-  /* ── 인트로 ── */
-  #intro {
-    position: fixed;
-    inset: 0;
-    background: #0d1130;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-  #intro-wordmark {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: clamp(13px, 3vw, 15px);
-    font-weight: 400;
-    letter-spacing: 0.45em;
-    color: rgba(255,255,255,0.35);
-    text-transform: uppercase;
-    margin-bottom: 3.5rem;
-    opacity: 0;
-    transition: opacity 0.7s ease;
-  }
-  #intro-text {
-    position: relative;
-    width: 100%;
-    max-width: 420px;
-    height: 5em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .phrase {
-    position: absolute;
-    font-family: 'Noto Serif KR', serif;
-    font-size: clamp(20px, 5vw, 27px);
-    font-weight: 300;
-    color: #f0ede8;
-    text-align: center;
-    line-height: 1.9;
-    letter-spacing: 0.02em;
-    opacity: 0;
-    width: 100%;
-    transition: opacity 0.5s ease;
-  }
-  #intro-skip {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-size: 11px;
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.12em;
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-family: 'Noto Sans KR', sans-serif;
-    padding: 8px 12px;
-    transition: color 0.2s;
-    opacity: 0;
-    animation: fadeIn 0.6s ease forwards 0.8s;
-  }
-  #intro-skip:hover { color: rgba(255,255,255,0.6); }
-  #intro-progress {
-    position: absolute;
-    bottom: 2.8rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 7px;
-    opacity: 0;
-    animation: fadeIn 0.6s ease forwards 0.8s;
-  }
-  .dot {
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: background 0.4s;
-  }
-  .dot.active { background: rgba(255,255,255,0.5); }
-  @keyframes fadeIn { to { opacity: 1; } }
-  #intro.leaving { animation: overlayOut 0.7s ease forwards; }
-  @keyframes overlayOut { to { opacity: 0; pointer-events: none; } }
-
-  /* ── 본문 공통 ── */
   #main { opacity: 0; transition: opacity 0.5s ease 0.1s; }
   #main.visible { opacity: 1; }
 
-  /* 화면 전환 핵심: ID 선택자의 display 속성이 .screen 숨김을 덮어쓰지 않도록 처리 */
   .screen:not(.active) { display: none !important; }
   .screen.active { display: block; }
 
@@ -127,12 +41,12 @@
     margin-bottom: 3rem;
   }
   .landing-title {
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Noto Sans KR', sans-serif;
     font-size: clamp(28px, 6vw, 42px);
     font-weight: 500;
     color: #111827;
-    line-height: 1.65;
-    letter-spacing: 0.02em;
+    line-height: 1.45;
+    letter-spacing: -0.03em;
     margin-bottom: 1.2rem;
   }
   .landing-title strong { font-weight: 500; color: #185fa5; }
@@ -167,10 +81,7 @@
     max-width: 680px;
     margin: 0 auto;
   }
-  .page-header {
-    margin-bottom: 2rem;
-    padding-top: 0.5rem;
-  }
+  .page-header { margin-bottom: 2rem; padding-top: 0.5rem; }
   .page-step {
     font-size: 11px;
     font-weight: 500;
@@ -187,11 +98,7 @@
     color: #1a1a1a;
     margin-bottom: 6px;
   }
-  .page-desc {
-    font-size: 13px;
-    color: #5f6b7a;
-    line-height: 1.7;
-  }
+  .page-desc { font-size: 13px; color: #5f6b7a; line-height: 1.7; }
   .group-label {
     font-size: 11px;
     font-weight: 500;
@@ -218,33 +125,15 @@
     position: relative;
   }
   @media (hover: hover) and (pointer: fine) {
-    .subject-card:hover {
-      border-color: #185fa5;
-      background: #f0f5fb;
-    }
+    .subject-card:hover { border-color: #185fa5; background: #f0f5fb; }
   }
-  .subject-card.selected {
-    border-color: #185fa5;
-    background: #f6faff;
-  }
-  .subject-card-name {
-    font-size: 15px;
-    font-weight: 500;
-    color: #1a1a1a;
-    margin-bottom: 4px;
-  }
-  .subject-card-tag {
-    font-size: 11px;
-    color: #6b7280;
-    line-height: 1.5;
-    padding-right: 16px;
-  }
+  .subject-card.selected { border-color: #185fa5; background: #f6faff; }
+  .subject-card-name { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+  .subject-card-tag { font-size: 11px; color: #6b7280; line-height: 1.5; padding-right: 16px; }
   .subject-check {
     position: absolute;
-    top: 10px;
-    right: 12px;
-    width: 18px;
-    height: 18px;
+    top: 10px; right: 12px;
+    width: 18px; height: 18px;
     border-radius: 50%;
     background: #185fa5;
     color: #fff;
@@ -256,10 +145,7 @@
     transform: scale(0);
     transition: all 0.15s;
   }
-  .subject-card.selected .subject-check {
-    opacity: 1;
-    transform: scale(1);
-  }
+  .subject-card.selected .subject-check { opacity: 1; transform: scale(1); }
   .select-footer {
     margin-top: 2rem;
     display: flex;
@@ -268,10 +154,7 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-  .select-count {
-    font-size: 13px;
-    color: #5f6b7a;
-  }
+  .select-count { font-size: 13px; color: #5f6b7a; }
   .select-count span { color: #185fa5; font-weight: 500; }
 
   /* ── 질문 ── */
@@ -286,39 +169,22 @@
   }
   .quiz-inner { width: 100%; max-width: 520px; }
   .progress-bar {
-    width: 100%;
-    height: 3px;
+    width: 100%; height: 3px;
     background: #edf1f5;
     border-radius: 1px;
     margin-bottom: 3rem;
     overflow: hidden;
   }
-  .progress-fill {
-    height: 100%;
-    background: #185fa5;
-    border-radius: 1px;
-    transition: width 0.4s ease;
-  }
-  .quiz-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
+  .progress-fill { height: 100%; background: #185fa5; border-radius: 1px; transition: width 0.4s ease; }
+  .quiz-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 2rem; }
   .quiz-tag {
-    font-size: 11px;
-    padding: 4px 11px;
+    font-size: 11px; padding: 4px 11px;
     border: 1px solid #dbe6f2;
     border-radius: 20px;
     color: #5f6b7a;
-    background:#f8fbff;
+    background: #f8fbff;
   }
-  .q-counter {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: #9aa3ad;
-    margin-bottom: 1.5rem;
-  }
+  .q-counter { font-size: 11px; letter-spacing: 0.2em; color: #9aa3ad; margin-bottom: 1.5rem; }
   .q-text {
     font-family: 'Noto Sans KR', sans-serif;
     font-size: clamp(19px, 4vw, 25px);
@@ -334,11 +200,7 @@
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .answer-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .answer-options { display: flex; flex-direction: column; gap: 10px; }
   .answer-btn {
     background: #ffffff;
     border: 1px solid #e8edf3;
@@ -359,15 +221,9 @@
   .answer-btn:nth-child(3) { animation: fadeUp 0.4s 0.19s forwards; }
   .answer-btn:nth-child(4) { animation: fadeUp 0.4s 0.26s forwards; }
   @media (hover: hover) and (pointer: fine) {
-    .answer-btn:hover {
-      border-color: #185fa5;
-      background: #f3f8fd;
-      color: #0f4c81;
-    }
+    .answer-btn:hover { border-color: #185fa5; background: #f3f8fd; color: #0f4c81; }
   }
-  .answer-btn:focus {
-    outline: none;
-  }
+  .answer-btn:focus { outline: none; }
 
   /* ── 결과 ── */
   #screen-result {
@@ -376,176 +232,66 @@
     margin: 0 auto;
   }
   .result-top-bar {
-    background: linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%);
+    background: linear-gradient(180deg, #f8fbff 0%, #eef5fc 100%);
     padding: 2.5rem 1.5rem;
     text-align: center;
     margin-bottom: 2rem;
     border-radius: 0 0 20px 20px;
   }
-  .result-eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.24em;
-    color: #4f5965;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .result-headline {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: clamp(22px, 5vw, 32px);
-    font-weight: 500;
-    color: #1a1a1a;
-    line-height: 1.6;
-    margin-bottom: 0.6rem;
-  }
+  .result-eyebrow { font-size: 11px; letter-spacing: 0.24em; color: #4f5965; text-transform: uppercase; margin-bottom: 1rem; }
+  .result-headline { font-family: 'Noto Sans KR', sans-serif; font-size: clamp(22px, 5vw, 32px); font-weight: 500; color: #1a1a1a; line-height: 1.6; margin-bottom: 0.6rem; }
   .result-headline strong { font-weight: 700; color: #185fa5; }
-  .result-sub {
-    font-size: 13px;
-    color: #5f6b7a;
-  }
-  .result-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-  .result-card {
-    background: #fff;
-    border: 1px solid #ebebeb;
-    border-radius: 14px;
-    overflow: hidden;
-  }
+  .result-sub { font-size: 13px; color: #5f6b7a; }
+  .result-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .result-card { background: #fff; border: 1px solid #ebebeb; border-radius: 14px; overflow: hidden; }
   .result-card.top { border-color: #185fa5; }
-  .result-card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 16px 12px;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .result-rank {
-    font-size: 11px;
-    font-weight: 500;
-    color: #999;
-    letter-spacing: 0.05em;
-    min-width: 32px;
-  }
+  .result-card-header { display: flex; align-items: center; gap: 8px; padding: 14px 16px 12px; border-bottom: 1px solid #f0f0f0; }
+  .result-rank { font-size: 11px; font-weight: 500; color: #999; letter-spacing: 0.05em; min-width: 32px; }
   .result-rank.first { color: #185fa5; }
-  .result-subject-name {
-    font-size: 17px;
-    font-weight: 500;
-    color: #1a1a1a;
-    flex: 1;
-  }
-  .result-pct {
-    font-size: 15px;
-    font-weight: 500;
-    color: #185fa5;
-  }
+  .result-subject-name { font-size: 17px; font-weight: 500; color: #1a1a1a; flex: 1; }
+  .result-pct { font-size: 15px; font-weight: 500; color: #185fa5; }
   .result-pct.mid { color: #888; }
   .result-pct.low { color: #bbb; }
-  .score-bar {
-    height: 3px;
-    background: #f0f0f0;
-    margin: 0 16px 14px;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .score-fill {
-    height: 100%;
-    background: #185fa5;
-    border-radius: 2px;
-    width: 0;
-    transition: width 1s ease;
-  }
+  .score-bar { height: 3px; background: #f0f0f0; margin: 0 16px 14px; border-radius: 2px; overflow: hidden; }
+  .score-fill { height: 100%; background: #185fa5; border-radius: 2px; width: 0; transition: width 1s ease; }
   .score-fill.mid { background: #bbb; }
   .score-fill.low { background: #e0e0e0; }
-  .result-reasons {
-    padding: 0 16px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .reason-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 13px;
-    color: #666;
-    line-height: 1.6;
-  }
-  .reason-dot {
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: #185fa5;
-    margin-top: 8px;
-    flex-shrink: 0;
-  }
+  .result-reasons { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .reason-row { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #666; line-height: 1.6; }
+  .reason-dot { width: 3px; height: 3px; border-radius: 50%; background: #185fa5; margin-top: 8px; flex-shrink: 0; }
   .reason-dot.dim { background: #ddd; }
-  .trait-box,
-  .ai-box {
+  .trait-box, .ai-box {
     background: #fff;
     border: 1px solid #ebebeb;
     border-radius: 14px;
     padding: 18px;
     margin-bottom: 1.5rem;
   }
-  .note-box {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    margin: -0.2rem 0 1.8rem;
-    text-align: center;
-  }
-  .ai-box { border-left: 3px solid #185fa5; }
-  .box-label,
-  .ai-label {
-    font-size: 11px;
-    font-weight: 700;
+  .ai-box { border-left: 3px solid #185fa5; border-radius: 0 14px 14px 0; }
+  .box-label, .ai-label {
+    font-size: 11px; font-weight: 700;
     letter-spacing: 0.1em;
     color: #185fa5;
     text-transform: uppercase;
     margin-bottom: 10px;
   }
-  .ai-text {
-    font-size: 14px;
-    color: #1f2937;
-    line-height: 1.85;
-    font-weight: 400;
-  }
+  .ai-text { font-size: 14px; color: #1f2937; line-height: 1.85; font-weight: 400; }
   .note-box {
-    font-size: 11px;
-    color: #9aa3ad;
+    font-size: 11px; color: #9aa3ad;
     line-height: 1.7;
-    font-weight: 400;
+    text-align: center;
+    margin-bottom: 1.8rem;
     letter-spacing: -0.01em;
   }
-  .trait-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-  }
-  .trait-chip {
-    font-size: 12px;
-    color: #555;
-    background: #f7f8fa;
-    border-radius: 999px;
-    padding: 5px 10px;
-  }
-  .result-actions {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
+  .trait-list { display: flex; flex-wrap: wrap; gap: 7px; }
+  .trait-chip { font-size: 12px; color: #555; background: #f7f8fa; border-radius: 999px; padding: 5px 10px; }
+
+  /* ── 공유/리트라이 행 (수정: grid→flex) ── */
   .share-row {
-    display: grid;
-    grid-template-columns: 44px 228px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 14px;
+    gap: 14px;
     padding: 10px 4px;
     margin-bottom: 1.5rem;
   }
@@ -555,17 +301,11 @@
     color: #4f5965;
     line-height: 1.5;
   }
-  .share-row-text strong {
-    display: block;
-    font-size: 14px;
-    color: #111827;
-    margin-bottom: 2px;
-  }
+  .share-row-text strong { display: block; font-size: 14px; color: #111827; margin-bottom: 2px; }
   .icon-btn {
-    width: 44px;
-    height: 44px;
+    width: 44px; height: 44px;
     border-radius: 12px;
-    border: none;
+    border: 1px solid #ebebeb;
     background: #fff;
     display: flex;
     align-items: center;
@@ -574,51 +314,43 @@
     transition: all 0.15s;
     color: #4b5563;
     padding: 0;
+    flex-shrink: 0;
   }
-  .icon-btn svg {
-    width: 21px;
-    height: 21px;
-    stroke: currentColor;
-    stroke-width: 2;
-    fill: none;
+  .icon-btn svg { width: 21px; height: 21px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .icon-btn:hover { border-color: #185fa5; color: #185fa5; transform: translateY(-1px); }
+
+  /* 스토리 카드 (화면용 미리보기) */
+  #story-card {
+    margin-bottom: 1.8rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef5fc 100%);
+    border-radius: 28px;
+    padding: 42px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 9/16;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  .icon-btn:hover {
-    border-color: #185fa5;
-    color: #185fa5;
-    transform: translateY(-1px);
-  }
-  .btn-outline {
-    background: #fff;
-    color: #1a1a1a;
-    border: 1px solid #ebebeb;
-    padding: 12px 24px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.15s;
-  }
-  .btn-outline:hover { border-color: #185fa5; color: #185fa5; }
 
   @media (max-width: 480px) {
     .subject-grid { grid-template-columns: 1fr 1fr; }
     .landing-btn, .btn-primary { width: 100%; }
     .select-footer { align-items: stretch; }
-    .result-actions button { flex: 1; }
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
-<!-- 본문 -->
 <div id="main" class="visible">
 
   <!-- 랜딩 -->
   <div id="screen-landing" class="screen active">
     <div class="landing-badge">TEUIDA MATH · 선택과목 성향 테스트</div>
-    <div class="landing-title" style="font-family:'Noto Sans KR',sans-serif;font-weight:500;line-height:1.45;letter-spacing:-0.03em;">
+    <div class="landing-title">
       나에게 더 잘 맞는<br>
       <strong>선택 과목은?</strong>
     </div>
@@ -761,6 +493,7 @@
       최종 선택은 학교 개설 여부, 평가 방식, 선택 인원 등을 함께 고려해주세요.
     </div>
 
+    <!-- 상세 결과 공유 -->
     <div class="share-row detail-share-row">
       <button class="icon-btn" onclick="shareDetailResult()" aria-label="선택 결과 공유하기">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -769,13 +502,14 @@
           <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
         </svg>
       </button>
-      <div class="share-row-text" style="text-align:left;">
+      <div class="share-row-text">
         <strong>Share</strong>
         과목 추천과 성향 분석 결과 보내기
       </div>
     </div>
 
-    <div id="story-card" style="margin-bottom:1.8rem;background:linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%);border-radius:28px;padding:42px 28px;text-align:center;position:relative;overflow:hidden;aspect-ratio:9/16;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+    <!-- 스토리 카드 미리보기 -->
+    <div id="story-card">
       <div style="font-size:11px;letter-spacing:0.28em;color:#7f8da3;margin-bottom:22px;">TEUIDA MATH</div>
       <div id="story-type" style="font-size:34px;font-weight:700;line-height:1.35;color:#1a1a1a;margin-bottom:10px;"></div>
       <div id="story-subtitle" style="font-size:15px;line-height:1.8;color:#5f6b7a;margin-bottom:30px;max-width:260px;"></div>
@@ -785,6 +519,7 @@
       <div style="position:absolute;bottom:26px;font-size:11px;color:#9aa3ad;letter-spacing:0.08em;">나에게 더 잘 맞는 선택 과목은?</div>
     </div>
 
+    <!-- 스토리 카드 공유 -->
     <div class="share-row story-share-row">
       <button class="icon-btn" onclick="shareStoryCard()" aria-label="스토리 카드 공유하기">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -793,12 +528,13 @@
           <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
         </svg>
       </button>
-      <div class="share-row-text" style="text-align:left;">
+      <div class="share-row-text">
         <strong>Share</strong>
         수학 타입 공유하기
       </div>
     </div>
 
+    <!-- 리트라이 -->
     <div class="share-row retry-row" style="margin-top:1rem;">
       <button class="icon-btn" onclick="restart()" aria-label="Retry">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -806,7 +542,7 @@
           <path d="M20 4v7h-7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <div class="share-row-text" style="text-align:left;">
+      <div class="share-row-text">
         <strong>Retry</strong>
         다시 진단하기
       </div>
@@ -816,180 +552,149 @@
 </div>
 
 <script>
-// ============================================================
-// 1. 성향 축
-// ============================================================
 const TRAITS = [
-  '계산지속력',
-  '함수사고',
-  '공간직관',
-  '논리증명',
-  '데이터분석',
-  '탐구자기주도',
-  '현실응용',
-  '창의융합',
-  '도전성향',
-  '디지털AI'
+  '계산지속력','함수사고','공간직관','논리증명',
+  '데이터분석','탐구자기주도','현실응용','창의융합','도전성향','디지털AI'
 ];
 
-// ============================================================
-// 2. 과목별 요구 성향 가중치
-// 0: 무관 / 1: 약간 / 2: 중요 / 3: 매우 중요
-// ============================================================
 const SUBJECTS = {
   '미적분Ⅱ': {
     label: '미적분Ⅱ',
-    traits: { 계산지속력: 3, 함수사고: 3, 논리증명: 1, 도전성향: 2, 현실응용: 1 },
+    traits: { 계산지속력:3, 함수사고:3, 논리증명:1, 도전성향:2, 현실응용:1 },
     summary: '함수의 변화 흐름을 깊게 보고, 긴 계산을 끝까지 밀고 가는 힘이 중요한 과목이야.'
   },
   '기하': {
     label: '기하',
-    traits: { 공간직관: 3, 논리증명: 3, 도전성향: 2, 계산지속력: 1 },
+    traits: { 공간직관:3, 논리증명:3, 도전성향:2, 계산지속력:1 },
     summary: '공간을 머릿속으로 그려보고, 도형의 성질을 논리적으로 따지는 힘이 중요한 과목이야.'
   },
   '경제수학': {
     label: '경제 수학',
-    traits: { 현실응용: 3, 함수사고: 2, 데이터분석: 1, 계산지속력: 1 },
+    traits: { 현실응용:3, 함수사고:2, 데이터분석:1, 계산지속력:1 },
     summary: '수학이 경제와 금융 상황에서 어떻게 쓰이는지 보는 현실 응용형 과목이야.'
   },
   '인공지능수학': {
     label: '인공지능 수학',
-    traits: { 디지털AI: 3, 데이터분석: 3, 현실응용: 2, 탐구자기주도: 1, 창의융합: 1 },
+    traits: { 디지털AI:3, 데이터분석:3, 현실응용:2, 탐구자기주도:1, 창의융합:1 },
     summary: '데이터, 알고리즘, AI의 판단 방식을 수학적으로 이해하는 응용형 과목이야.'
   },
   '직무수학': {
     label: '직무 수학',
-    traits: { 현실응용: 3, 데이터분석: 1, 계산지속력: 1 },
+    traits: { 현실응용:3, 데이터분석:1, 계산지속력:1 },
     summary: '직업과 생활 장면에서 필요한 수학을 실용적으로 다루는 과목이야.'
   },
   '수학과문화': {
     label: '수학과 문화',
-    traits: { 창의융합: 3, 현실응용: 1, 탐구자기주도: 2, 공간직관: 1 },
+    traits: { 창의융합:3, 현실응용:1, 탐구자기주도:2, 공간직관:1 },
     summary: '수학을 예술, 문화, 역사, 사회와 연결해보는 융합형 과목이야.'
   },
   '실용통계': {
     label: '실용 통계',
-    traits: { 데이터분석: 3, 현실응용: 2, 탐구자기주도: 1 },
+    traits: { 데이터분석:3, 현실응용:2, 탐구자기주도:1 },
     summary: '자료를 모으고 해석해서 현실적인 판단으로 연결하는 데이터 중심 과목이야.'
   },
   '수학과제탐구': {
     label: '수학과제 탐구',
-    traits: { 탐구자기주도: 3, 창의융합: 2, 논리증명: 1, 데이터분석: 1, 도전성향: 1 },
+    traits: { 탐구자기주도:3, 창의융합:2, 논리증명:1, 데이터분석:1, 도전성향:1 },
     summary: '스스로 주제를 잡고 조사·탐구·정리하는 자기주도형 과목이야.'
   },
   '전문수학': {
     label: '전문 수학',
-    traits: { 계산지속력: 2, 함수사고: 2, 공간직관: 2, 논리증명: 2, 데이터분석: 1, 도전성향: 2 },
+    traits: { 계산지속력:2, 함수사고:2, 공간직관:2, 논리증명:2, 데이터분석:1, 도전성향:2 },
     summary: '미적분, 기하, 확률과 통계를 폭넓게 심화하는 종합형 과목이야.'
   },
   '이산수학': {
     label: '이산 수학',
-    traits: { 논리증명: 3, 디지털AI: 2, 데이터분석: 2, 탐구자기주도: 1 },
+    traits: { 논리증명:3, 디지털AI:2, 데이터분석:2, 탐구자기주도:1 },
     summary: '논리, 경우, 알고리즘처럼 컴퓨터 과학과 가까운 사고를 다루는 과목이야.'
   },
   '고급대수': {
     label: '고급 대수',
-    traits: { 논리증명: 3, 함수사고: 2, 계산지속력: 2, 디지털AI: 2, 데이터분석: 1, 도전성향: 2 },
+    traits: { 논리증명:3, 함수사고:2, 계산지속력:2, 디지털AI:2, 데이터분석:1, 도전성향:2 },
     summary: '벡터공간, 선형변환처럼 구조를 추상적으로 이해하는 힘이 중요한 과목이야.'
   },
   '고급미적분': {
     label: '고급 미적분',
-    traits: { 계산지속력: 3, 함수사고: 3, 논리증명: 2, 도전성향: 3 },
+    traits: { 계산지속력:3, 함수사고:3, 논리증명:2, 도전성향:3 },
     summary: '미적분을 더 깊고 길게 밀고 가는 과목이라 함수 이해와 계산 체력이 모두 필요해.'
   },
   '고급기하': {
     label: '고급 기하',
-    traits: { 공간직관: 3, 논리증명: 3, 도전성향: 3, 계산지속력: 1 },
+    traits: { 공간직관:3, 논리증명:3, 도전성향:3, 계산지속력:1 },
     summary: '공간 감각과 증명형 사고를 더 높은 수준으로 요구하는 심화 기하 과목이야.'
   }
 };
 
-// ============================================================
-// 3. 질문 데이터
-// reverse: true면 역문항. 사용자가 3점으로 답하면 실제 점수는 0점 처리.
-// ============================================================
 const ALL_QUESTIONS = [
-  { id: 1, trait: '계산지속력', reverse: false, text: '계산이 길어져도 끝까지 집중할 수 있는 편이다' },
-  { id: 2, trait: '계산지속력', reverse: false, text: '복잡한 식을 정리하다 보면 오히려 몰입될 때가 있다' },
-  { id: 3, trait: '계산지속력', reverse: true, text: '계산이 많아 보이면 시작도 하기 전부터 피곤하다' },
-  { id: 4, trait: '계산지속력', reverse: false, text: '문제를 틀려도 계산 과정을 다시 보는 건 크게 안 귀찮다' },
-  { id: 5, trait: '계산지속력', reverse: false, text: '여러 단계를 차근차근 밀어가는 문제에 강한 편이다' },
-  { id: 6, trait: '계산지속력', reverse: true, text: '계산 실수 때문에 아는 문제를 자주 틀린다' },
-
-  { id: 7, trait: '함수사고', reverse: false, text: '그래프를 보면 어디서 어떻게 변하는지가 먼저 눈에 들어온다' },
-  { id: 8, trait: '함수사고', reverse: false, text: '식만 보는 것보다 그래프로 보면 이해가 더 잘 된다' },
-  { id: 9, trait: '함수사고', reverse: false, text: '함수 문제는 계산보다 흐름 이해가 더 중요하다고 느낀다' },
-  { id: 10, trait: '함수사고', reverse: true, text: '그래프가 복잡해지면 갑자기 흐름이 끊긴다' },
-  { id: 11, trait: '함수사고', reverse: false, text: '함수 문제를 풀 때 전체 흐름부터 보려는 편이다' },
-  { id: 12, trait: '함수사고', reverse: false, text: '그래프 이동이나 변화가 직관적으로 느껴지는 편이다' },
-
-  { id: 13, trait: '공간직관', reverse: false, text: '도형 문제는 그림을 직접 그리면 훨씬 잘 풀린다' },
-  { id: 14, trait: '공간직관', reverse: false, text: '입체도형은 머릿속으로 상상하는 게 어렵지 않다' },
-  { id: 15, trait: '공간직관', reverse: true, text: '도형 문제는 어디를 봐야 할지 막막할 때가 많다' },
-  { id: 16, trait: '공간직관', reverse: false, text: '도형은 식보다 그림이 먼저 떠오르는 편이다' },
-  { id: 17, trait: '공간직관', reverse: false, text: '평면도형보다 공간도형이 더 재밌게 느껴진다' },
-  { id: 18, trait: '공간직관', reverse: false, text: '도형 문제를 풀다 보면 머릿속에서 움직이는 느낌이 있다' },
-
-  { id: 19, trait: '논리증명', reverse: false, text: '답만 맞는 것보다 왜 그렇게 되는지가 이해돼야 마음이 편하다' },
-  { id: 20, trait: '논리증명', reverse: false, text: '풀이 과정을 하나씩 연결해가는 게 재밌다' },
-  { id: 21, trait: '논리증명', reverse: true, text: '“그냥 외우면 안 되나?” 싶은 순간이 많다' },
-  { id: 22, trait: '논리증명', reverse: false, text: '풀이가 논리적으로 깔끔한지도 신경 쓰는 편이다' },
-  { id: 23, trait: '논리증명', reverse: false, text: '증명 문제는 답답하기보다는 퍼즐 같다고 느껴진다' },
-  { id: 24, trait: '논리증명', reverse: false, text: '문제를 풀고 나면 왜 이 방법이 되는지도 다시 생각해보는 편이다' },
-
-  { id: 25, trait: '데이터분석', reverse: false, text: '표나 그래프를 보면 숫자 변화 이유가 궁금해진다' },
-  { id: 26, trait: '데이터분석', reverse: false, text: '데이터를 정리해서 비교하는 과정이 생각보다 재밌다' },
-  { id: 27, trait: '데이터분석', reverse: false, text: '경우를 나눠서 생각하는 게 크게 어렵지 않다' },
-  { id: 28, trait: '데이터분석', reverse: true, text: '확률 문제는 애매해서 답답하게 느껴진다' },
-  { id: 29, trait: '데이터분석', reverse: false, text: '뉴스나 통계를 볼 때 숫자 근거를 보게 되는 편이다' },
-  { id: 30, trait: '데이터분석', reverse: false, text: '자료를 보고 패턴 찾는 게 재밌다' },
-
-  { id: 31, trait: '탐구자기주도', reverse: false, text: '정답이 바로 안 나와도 혼자 계속 붙잡고 있는 편이다' },
-  { id: 32, trait: '탐구자기주도', reverse: false, text: '궁금한 건 시키지 않아도 찾아보는 편이다' },
-  { id: 33, trait: '탐구자기주도', reverse: true, text: '자유롭게 탐구하라고 하면 오히려 막막하다' },
-  { id: 34, trait: '탐구자기주도', reverse: false, text: '한 문제를 여러 방식으로 풀어보는 걸 좋아한다' },
-  { id: 35, trait: '탐구자기주도', reverse: false, text: '문제를 풀다가 다른 방법이 궁금해질 때가 있다' },
-  { id: 36, trait: '탐구자기주도', reverse: true, text: '정해진 풀이만 반복하면 금방 질리는 편이다' },
-
- { id: 37, trait: '현실응용', reverse: false, text: '“이 개념이 실제 어디에 쓰이는지” 알면 더 흥미가 생긴다' },
-  { id: 38, trait: '현실응용', reverse: false, text: '현실 문제를 수학으로 설명하는 게 흥미롭다' },
-  { id: 39, trait: '현실응용', reverse: false, text: '순수 계산보다 실제 사례가 있는 문제가 더 기억에 남는다' },
-  { id: 40, trait: '현실응용', reverse: false, text: '수학이 경제·기술·사회와 연결되는 게 재밌다' },
-  { id: 41, trait: '현실응용', reverse: false, text: '추상적인 개념보다 실제 활용 예시가 있어야 이해가 잘 된다' },
-  { id: 42, trait: '현실응용', reverse: false, text: '실생활과 가까운 문제일수록 더 집중하게 된다' },
-
-  { id: 43, trait: '창의융합', reverse: false, text: '한 가지 정답보다 여러 방식으로 생각하는 게 재밌다' },
-  { id: 44, trait: '창의융합', reverse: false, text: '수학이 예술·AI·사회 같은 다른 분야와 연결되는 게 흥미롭다' },
-  { id: 45, trait: '창의융합', reverse: true, text: '정해진 풀이만 따라가는 건 금방 질린다' },
-  { id: 46, trait: '창의융합', reverse: false, text: '새로운 방식으로 접근하는 문제를 좋아하는 편이다' },
-  { id: 47, trait: '창의융합', reverse: false, text: '답보다 아이디어 자체가 재밌을 때가 있다' },
-  { id: 48, trait: '창의융합', reverse: false, text: '답보다 “어떻게 그런 생각을 했는지”가 궁금해질 때가 있다' },
-
-  { id: 49, trait: '도전성향', reverse: false, text: '조금 어려워도 흥미 있으면 도전해보는 편이다' },
-  { id: 50, trait: '도전성향', reverse: true, text: '새로운 과목보다는 익숙하고 안정적인 선택이 마음 편하다' },
-  { id: 51, trait: '도전성향', reverse: true, text: '내신 부담이 크면 흥미 있어도 고민하게 된다' },
-  { id: 52, trait: '도전성향', reverse: false, text: '처음엔 어려워도 파고들수록 재밌어지는 스타일이다' },
-  { id: 53, trait: '도전성향', reverse: false, text: '잘할 수 있는 과목보다 재밌는 과목이 더 끌릴 때가 있다' },
-  { id: 54, trait: '도전성향', reverse: true, text: '확실한 정답이 보이는 과목이 마음 편하다' },
-
-  { id: 55, trait: '디지털AI', reverse: false, text: 'AI나 데이터 기술 이야기를 들으면 흥미가 생긴다' },
-  { id: 56, trait: '디지털AI', reverse: false, text: '문제를 자동화하거나 효율적으로 해결하는 방식이 재밌다' },
-  { id: 57, trait: '디지털AI', reverse: false, text: '컴퓨터가 어떻게 판단하는지 궁금했던 적이 있다' },
-  { id: 58, trait: '디지털AI', reverse: false, text: '수학을 계산보다 시스템처럼 느낄 때가 있다' },
-  { id: 59, trait: '디지털AI', reverse: false, text: '패턴을 규칙처럼 정리하는 걸 좋아한다' },
-  { id: 60, trait: '디지털AI', reverse: false, text: '코딩이나 알고리즘 이야기가 생각보다 재밌다' }
+  { id:1,  trait:'계산지속력',   reverse:false, text:'계산이 길어져도 끝까지 집중할 수 있는 편이다' },
+  { id:2,  trait:'계산지속력',   reverse:false, text:'복잡한 식을 정리하다 보면 오히려 몰입될 때가 있다' },
+  { id:3,  trait:'계산지속력',   reverse:true,  text:'계산이 많아 보이면 시작도 하기 전부터 피곤하다' },
+  { id:4,  trait:'계산지속력',   reverse:false, text:'문제를 틀려도 계산 과정을 다시 보는 건 크게 안 귀찮다' },
+  { id:5,  trait:'계산지속력',   reverse:false, text:'여러 단계를 차근차근 밀어가는 문제에 강한 편이다' },
+  { id:6,  trait:'계산지속력',   reverse:true,  text:'계산 실수 때문에 아는 문제를 자주 틀린다' },
+  { id:7,  trait:'함수사고',     reverse:false, text:'그래프를 보면 어디서 어떻게 변하는지가 먼저 눈에 들어온다' },
+  { id:8,  trait:'함수사고',     reverse:false, text:'식만 보는 것보다 그래프로 보면 이해가 더 잘 된다' },
+  { id:9,  trait:'함수사고',     reverse:false, text:'함수 문제는 계산보다 흐름 이해가 더 중요하다고 느낀다' },
+  { id:10, trait:'함수사고',     reverse:true,  text:'그래프가 복잡해지면 갑자기 흐름이 끊긴다' },
+  { id:11, trait:'함수사고',     reverse:false, text:'함수 문제를 풀 때 전체 흐름부터 보려는 편이다' },
+  { id:12, trait:'함수사고',     reverse:false, text:'그래프 이동이나 변화가 직관적으로 느껴지는 편이다' },
+  { id:13, trait:'공간직관',     reverse:false, text:'도형 문제는 그림을 직접 그리면 훨씬 잘 풀린다' },
+  { id:14, trait:'공간직관',     reverse:false, text:'입체도형은 머릿속으로 상상하는 게 어렵지 않다' },
+  { id:15, trait:'공간직관',     reverse:true,  text:'도형 문제는 어디를 봐야 할지 막막할 때가 많다' },
+  { id:16, trait:'공간직관',     reverse:false, text:'도형은 식보다 그림이 먼저 떠오르는 편이다' },
+  { id:17, trait:'공간직관',     reverse:false, text:'평면도형보다 공간도형이 더 재밌게 느껴진다' },
+  { id:18, trait:'공간직관',     reverse:false, text:'도형 문제를 풀다 보면 머릿속에서 움직이는 느낌이 있다' },
+  { id:19, trait:'논리증명',     reverse:false, text:'답만 맞는 것보다 왜 그렇게 되는지가 이해돼야 마음이 편하다' },
+  { id:20, trait:'논리증명',     reverse:false, text:'풀이 과정을 하나씩 연결해가는 게 재밌다' },
+  { id:21, trait:'논리증명',     reverse:true,  text:'"그냥 외우면 안 되나?" 싶은 순간이 많다' },
+  { id:22, trait:'논리증명',     reverse:false, text:'풀이가 논리적으로 깔끔한지도 신경 쓰는 편이다' },
+  { id:23, trait:'논리증명',     reverse:false, text:'증명 문제는 답답하기보다는 퍼즐 같다고 느껴진다' },
+  { id:24, trait:'논리증명',     reverse:false, text:'문제를 풀고 나면 왜 이 방법이 되는지도 다시 생각해보는 편이다' },
+  { id:25, trait:'데이터분석',   reverse:false, text:'표나 그래프를 보면 숫자 변화 이유가 궁금해진다' },
+  { id:26, trait:'데이터분석',   reverse:false, text:'데이터를 정리해서 비교하는 과정이 생각보다 재밌다' },
+  { id:27, trait:'데이터분석',   reverse:false, text:'경우를 나눠서 생각하는 게 크게 어렵지 않다' },
+  { id:28, trait:'데이터분석',   reverse:true,  text:'확률 문제는 애매해서 답답하게 느껴진다' },
+  { id:29, trait:'데이터분석',   reverse:false, text:'뉴스나 통계를 볼 때 숫자 근거를 보게 되는 편이다' },
+  { id:30, trait:'데이터분석',   reverse:false, text:'자료를 보고 패턴 찾는 게 재밌다' },
+  { id:31, trait:'탐구자기주도', reverse:false, text:'정답이 바로 안 나와도 혼자 계속 붙잡고 있는 편이다' },
+  { id:32, trait:'탐구자기주도', reverse:false, text:'궁금한 건 시키지 않아도 찾아보는 편이다' },
+  { id:33, trait:'탐구자기주도', reverse:true,  text:'자유롭게 탐구하라고 하면 오히려 막막하다' },
+  { id:34, trait:'탐구자기주도', reverse:false, text:'한 문제를 여러 방식으로 풀어보는 걸 좋아한다' },
+  { id:35, trait:'탐구자기주도', reverse:false, text:'문제를 풀다가 다른 방법이 궁금해질 때가 있다' },
+  { id:36, trait:'탐구자기주도', reverse:true,  text:'정해진 풀이만 반복하면 금방 질리는 편이다' },
+  { id:37, trait:'현실응용',     reverse:false, text:'"이 개념이 실제 어디에 쓰이는지" 알면 더 흥미가 생긴다' },
+  { id:38, trait:'현실응용',     reverse:false, text:'현실 문제를 수학으로 설명하는 게 흥미롭다' },
+  { id:39, trait:'현실응용',     reverse:false, text:'순수 계산보다 실제 사례가 있는 문제가 더 기억에 남는다' },
+  { id:40, trait:'현실응용',     reverse:false, text:'수학이 경제·기술·사회와 연결되는 게 재밌다' },
+  { id:41, trait:'현실응용',     reverse:false, text:'추상적인 개념보다 실제 활용 예시가 있어야 이해가 잘 된다' },
+  { id:42, trait:'현실응용',     reverse:false, text:'실생활과 가까운 문제일수록 더 집중하게 된다' },
+  { id:43, trait:'창의융합',     reverse:false, text:'한 가지 정답보다 여러 방식으로 생각하는 게 재밌다' },
+  { id:44, trait:'창의융합',     reverse:false, text:'수학이 예술·AI·사회 같은 다른 분야와 연결되는 게 흥미롭다' },
+  { id:45, trait:'창의융합',     reverse:true,  text:'정해진 풀이만 따라가는 건 금방 질린다' },
+  { id:46, trait:'창의융합',     reverse:false, text:'새로운 방식으로 접근하는 문제를 좋아하는 편이다' },
+  { id:47, trait:'창의융합',     reverse:false, text:'답보다 아이디어 자체가 재밌을 때가 있다' },
+  { id:48, trait:'창의융합',     reverse:false, text:'답보다 "어떻게 그런 생각을 했는지"가 궁금해질 때가 있다' },
+  { id:49, trait:'도전성향',     reverse:false, text:'조금 어려워도 흥미 있으면 도전해보는 편이다' },
+  { id:50, trait:'도전성향',     reverse:true,  text:'새로운 과목보다는 익숙하고 안정적인 선택이 마음 편하다' },
+  { id:51, trait:'도전성향',     reverse:true,  text:'내신 부담이 크면 흥미 있어도 고민하게 된다' },
+  { id:52, trait:'도전성향',     reverse:false, text:'처음엔 어려워도 파고들수록 재밌어지는 스타일이다' },
+  { id:53, trait:'도전성향',     reverse:false, text:'잘할 수 있는 과목보다 재밌는 과목이 더 끌릴 때가 있다' },
+  { id:54, trait:'도전성향',     reverse:true,  text:'확실한 정답이 보이는 과목이 마음 편하다' },
+  { id:55, trait:'디지털AI',     reverse:false, text:'AI나 데이터 기술 이야기를 들으면 흥미가 생긴다' },
+  { id:56, trait:'디지털AI',     reverse:false, text:'문제를 자동화하거나 효율적으로 해결하는 방식이 재밌다' },
+  { id:57, trait:'디지털AI',     reverse:false, text:'컴퓨터가 어떻게 판단하는지 궁금했던 적이 있다' },
+  { id:58, trait:'디지털AI',     reverse:false, text:'수학을 계산보다 시스템처럼 느낄 때가 있다' },
+  { id:59, trait:'디지털AI',     reverse:false, text:'패턴을 규칙처럼 정리하는 걸 좋아한다' },
+  { id:60, trait:'디지털AI',     reverse:false, text:'코딩이나 알고리즘 이야기가 생각보다 재밌다' }
 ];
 
 const ANSWER_OPTIONS = [
-  { text: '매우 그렇다', score: 3 },
-  { text: '그런 편이다', score: 2 },
-  { text: '아닌 편이다', score: 1 },
-  { text: '전혀 아니다', score: 0 }
+  { text:'매우 그렇다', score:3 },
+  { text:'그런 편이다', score:2 },
+  { text:'아닌 편이다', score:1 },
+  { text:'전혀 아니다', score:0 }
 ];
 
-// ============================================================
-// 4. 상태값
-// ============================================================
 let selectedSubjects = [];
 let currentQuestions = [];
 let currentQIdx = 0;
@@ -998,15 +703,10 @@ let traitCounts = {};
 let lastScores = [];
 let answerHistory = [];
 
-// ============================================================
-// 5. 인트로 없음: 바로 랜딩 화면 표시
-// ============================================================
+document.getElementById('main').classList.add('visible');
 
-// ============================================================
-// 6. 화면 전환 및 선택
-// ============================================================
 function goTo(id) {
-  document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
@@ -1014,72 +714,44 @@ function goTo(id) {
 function toggleSubject(el, name) {
   if (el.classList.contains('selected')) {
     el.classList.remove('selected');
-    selectedSubjects = selectedSubjects.filter(subject => subject !== name);
+    selectedSubjects = selectedSubjects.filter(s => s !== name);
   } else {
     if (selectedSubjects.length >= 4) return;
     el.classList.add('selected');
     selectedSubjects.push(name);
   }
-
   document.getElementById('count').textContent = selectedSubjects.length;
   document.getElementById('btn-next').disabled = selectedSubjects.length < 2;
 }
 
-// ============================================================
-// 7. 질문 선택 로직
-// 선택 과목의 가중치 합산 → 중요한 trait 추출 → trait별 질문 선택
-// ============================================================
-function pickQuestionsBySelectedSubjects(subjects) {
+function pickQuestions(subjects) {
   const traitImportance = {};
-
-  subjects.forEach(subjectName => {
-    const subject = SUBJECTS[subjectName];
-    if (!subject) return;
-
-    Object.entries(subject.traits).forEach(([trait, weight]) => {
-      traitImportance[trait] = (traitImportance[trait] || 0) + weight;
+  subjects.forEach(name => {
+    const s = SUBJECTS[name];
+    if (!s) return;
+    Object.entries(s.traits).forEach(([t, w]) => {
+      traitImportance[t] = (traitImportance[t] || 0) + w;
     });
   });
 
-  // 1) 대표 성향을 잡기 위한 공통 질문
-  // 비교군에 너무 끌려가지 않도록 주요 trait을 한 번씩 확인한다.
-  const commonQuestionIds = [
-    1,   // 계산지속력
-    7,   // 함수사고
-    14,  // 공간직관
-    19,  // 논리증명
-    25,  // 데이터분석
-    32,  // 탐구자기주도
-    37,  // 현실응용
-    55   // 디지털AI
-  ];
+  // 공통 질문 7개 (타입 진단용)
+  const commonIds = [1, 7, 14, 19, 25, 32, 37, 55];
+  const picked = commonIds.map(id => ALL_QUESTIONS.find(q => q.id === id)).filter(Boolean);
 
-  const picked = commonQuestionIds
-    .map(id => ALL_QUESTIONS.find(q => q.id === id))
-    .filter(Boolean);
-
-  // 2) 사용자가 고른 비교군을 더 잘 가르기 위한 맞춤 질문
+  // 과목 맞춤 질문 (최대 15개까지)
   const importantTraits = Object.entries(traitImportance)
-    .sort((a, b) => b[1] - a[1])
-    .map(([trait]) => trait);
+    .sort((a, b) => b[1] - a[1]).map(([t]) => t);
 
   importantTraits.forEach(trait => {
     if (picked.length >= 15) return;
-
-    const candidates = ALL_QUESTIONS.filter(q => {
-      const alreadyPicked = picked.some(p => p.id === q.id);
-      return q.trait === trait && !alreadyPicked;
-    });
-
-    // 비교군 질문에는 역문항을 우선 1개 섞어서 응답 편향을 줄인다.
-    const reverse = candidates.find(q => q.reverse);
-    const normal = candidates.find(q => !q.reverse);
-
-    if (reverse && picked.length < 15) picked.push(reverse);
-    if (normal && picked.length < 15) picked.push(normal);
+    const candidates = ALL_QUESTIONS.filter(q => q.trait === trait && !picked.some(p => p.id === q.id));
+    const rev = candidates.find(q => q.reverse);
+    const norm = candidates.find(q => !q.reverse);
+    if (rev && picked.length < 15) picked.push(rev);
+    if (norm && picked.length < 15) picked.push(norm);
   });
 
-  // 3) 그래도 15개가 안 차면 전체 문항에서 보충
+  // 부족하면 보충
   ALL_QUESTIONS.forEach(q => {
     if (picked.length >= 15) return;
     if (!picked.some(p => p.id === q.id)) picked.push(q);
@@ -1090,20 +762,14 @@ function pickQuestionsBySelectedSubjects(subjects) {
 
 function startQuiz() {
   answerHistory = [];
-  currentQuestions = pickQuestionsBySelectedSubjects(selectedSubjects);
+  currentQuestions = pickQuestions(selectedSubjects);
   currentQIdx = 0;
   traitScores = {};
   traitCounts = {};
+  TRAITS.forEach(t => { traitScores[t] = 0; traitCounts[t] = 0; });
 
-  TRAITS.forEach(trait => {
-    traitScores[trait] = 0;
-    traitCounts[trait] = 0;
-  });
-
-  const tagsEl = document.getElementById('quiz-tags');
-  tagsEl.innerHTML = selectedSubjects.map(subject => {
-    return `<span class="quiz-tag">${SUBJECTS[subject].label}</span>`;
-  }).join('');
+  document.getElementById('quiz-tags').innerHTML =
+    selectedSubjects.map(s => `<span class="quiz-tag">${SUBJECTS[s].label}</span>`).join('');
 
   goTo('screen-quiz');
   renderQuestion();
@@ -1115,45 +781,26 @@ function renderQuestion() {
 
   document.getElementById('progress-fill').style.width = ((currentQIdx / total) * 100) + '%';
   document.getElementById('q-counter').textContent = `질문 ${currentQIdx + 1} / ${total}`;
-
-  const backBtn = document.getElementById('back-btn');
-  backBtn.style.display = currentQIdx > 0 ? 'block' : 'none';
+  document.getElementById('back-btn').style.display = currentQIdx > 0 ? 'block' : 'none';
 
   const qText = document.getElementById('q-text');
-  qText.style.animation = 'none';
-  qText.offsetHeight;
-  qText.style.animation = '';
+  qText.style.animation = 'none'; qText.offsetHeight; qText.style.animation = '';
   qText.textContent = q.text;
 
-  const optEl = document.getElementById('answer-options');
-  optEl.innerHTML = ANSWER_OPTIONS.map(option => {
-    return `<button class="answer-btn" onclick="selectAnswer(${option.score})">${option.text}</button>`;
-  }).join('');
+  document.getElementById('answer-options').innerHTML = ANSWER_OPTIONS.map(opt =>
+    `<button class="answer-btn" onclick="selectAnswer(${opt.score})">${opt.text}</button>`
+  ).join('');
 }
 
 function selectAnswer(rawScore) {
-  // 모바일에서 이전 답변 버튼의 hover/focus 상태가 다음 질문에 남는 현상 방지
-  if (document.activeElement && document.activeElement.blur) {
-    document.activeElement.blur();
-  }
-
-  document.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.classList.remove('selected');
-    btn.blur();
-  });
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
 
   const q = currentQuestions[currentQIdx];
   const finalScore = q.reverse ? 3 - rawScore : rawScore;
 
-  answerHistory.push({
-    questionIndex: currentQIdx,
-    trait: q.trait,
-    score: finalScore
-  });
-
+  answerHistory.push({ questionIndex: currentQIdx, trait: q.trait, score: finalScore });
   traitScores[q.trait] += finalScore;
   traitCounts[q.trait] += 1;
-
   currentQIdx++;
 
   if (currentQIdx >= currentQuestions.length) {
@@ -1166,71 +813,43 @@ function selectAnswer(rawScore) {
 
 function goPrevQuestion() {
   if (currentQIdx <= 0) return;
-
-  const lastAnswer = answerHistory.pop();
-
-  if (lastAnswer) {
-    traitScores[lastAnswer.trait] -= lastAnswer.score;
-    traitCounts[lastAnswer.trait] -= 1;
-  }
-
+  const last = answerHistory.pop();
+  if (last) { traitScores[last.trait] -= last.score; traitCounts[last.trait] -= 1; }
   currentQIdx--;
   renderQuestion();
 }
 
 function normalizeTraitScores() {
-  TRAITS.forEach(trait => {
-    if (traitCounts[trait] > 0) {
-      traitScores[trait] = traitScores[trait] / traitCounts[trait];
-    } else {
-      traitScores[trait] = 1.5;
-    }
+  TRAITS.forEach(t => {
+    traitScores[t] = traitCounts[t] > 0 ? traitScores[t] / traitCounts[t] : 1.5;
   });
 }
 
-// ============================================================
-// 8. 점수 계산
-// ============================================================
-function calculateSubjectScore(subjectName) {
-  const subject = SUBJECTS[subjectName];
-  const traits = subject.traits;
-
-  let score = 0;
-  let maxScore = 0;
-
-  Object.entries(traits).forEach(([trait, weight]) => {
-    const userScore = traitScores[trait] ?? 1.5;
-    score += userScore * weight;
-    maxScore += 3 * weight;
+function calculateSubjectScore(name) {
+  const traits = SUBJECTS[name].traits;
+  let score = 0, max = 0;
+  Object.entries(traits).forEach(([t, w]) => {
+    score += (traitScores[t] ?? 1.5) * w;
+    max += 3 * w;
   });
-
-  return Math.round((score / maxScore) * 100);
+  return Math.round((score / max) * 100);
 }
 
 function getTopTraits(limit = 4) {
   return Object.entries(traitScores)
-    .filter(([trait, score]) => score > 1.5)
+    .filter(([, s]) => s > 1.5)
     .sort((a, b) => b[1] - a[1])
     .slice(0, limit)
     .map(([trait, score]) => ({ trait, score }));
 }
 
-function getSubjectReasons(subjectName) {
-  const subject = SUBJECTS[subjectName];
-  const traits = Object.entries(subject.traits).sort((a, b) => b[1] - a[1]);
+function getSubjectReasons(name) {
+  const traits = Object.entries(SUBJECTS[name].traits).sort((a, b) => b[1] - a[1]);
   const reasons = [];
-
-  traits.forEach(([trait, weight]) => {
-    const score = traitScores[trait] ?? 1.5;
-    if (score >= 2.1) {
-      reasons.push(getPositiveReason(trait));
-    }
+  traits.forEach(([trait]) => {
+    if ((traitScores[trait] ?? 1.5) >= 2.1) reasons.push(getPositiveReason(trait));
   });
-
-  if (reasons.length === 0) {
-    reasons.push(subject.summary);
-  }
-
+  if (!reasons.length) reasons.push(SUBJECTS[name].summary);
   return reasons.slice(0, 3);
 }
 
@@ -1250,56 +869,54 @@ function getPositiveReason(trait) {
   return map[trait] || `${trait} 성향이 잘 드러났어`;
 }
 
+function getStoryType() {
+  const top = Object.entries(traitScores).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const map = {
+    공간직관:    { title:'공간 직관형',    subtitle:'도형과 공간을 이미지처럼 떠올리는 타입', subjects:['고급기하','기하'] },
+    함수사고:    { title:'함수 흐름형',    subtitle:'변화의 흐름과 구조를 읽는 타입',         subjects:['고급미적분','미적분Ⅱ'] },
+    논리증명:    { title:'논리 탐구형',    subtitle:'답보다 원리를 끝까지 파고드는 타입',      subjects:['고급대수','이산수학'] },
+    데이터분석:  { title:'데이터 분석형',  subtitle:'숫자 속 패턴과 근거를 읽는 타입',        subjects:['실용통계','인공지능 수학'] },
+    현실응용:    { title:'현실 응용형',    subtitle:'수학이 현실에서 쓰이는 방식에 끌리는 타입', subjects:['경제 수학','직무 수학'] },
+    창의융합:    { title:'융합 창의형',    subtitle:'수학을 다양한 분야와 연결해보는 타입',    subjects:['수학과 문화','수학과제 탐구'] },
+    탐구자기주도:{ title:'자기주도 탐구형',subtitle:'스스로 질문하고 끝까지 파고드는 타입',   subjects:['수학과제 탐구','전문 수학'] },
+    디지털AI:    { title:'디지털 사고형',  subtitle:'AI와 알고리즘 구조에 흥미를 느끼는 타입', subjects:['인공지능 수학','이산수학'] },
+    계산지속력:  { title:'집중 몰입형',    subtitle:'긴 계산도 끝까지 밀고 가는 타입',        subjects:['고급미적분','전문 수학'] },
+    도전성향:    { title:'도전 성장형',    subtitle:'어려워도 흥미 있으면 파고드는 타입',      subjects:['고급기하','고급미적분'] }
+  };
+  return map[top] || { title:'균형 성장형', subtitle:'다양한 방식으로 수학을 받아들이는 타입', subjects:['전문 수학','수학과제 탐구'] };
+}
+
 function showResult() {
   goTo('screen-result');
 
-  const scores = selectedSubjects.map(subject => ({
-    name: subject,
-    label: SUBJECTS[subject].label,
-    pct: calculateSubjectScore(subject)
-  }));
-
-  scores.sort((a, b) => b.pct - a.pct);
+  const scores = selectedSubjects.map(name => ({
+    name, label: SUBJECTS[name].label, pct: calculateSubjectScore(name)
+  })).sort((a, b) => b.pct - a.pct);
   lastScores = scores;
 
   const top = scores[0];
   document.getElementById('result-headline').innerHTML = `<strong>${top.label}</strong>에<br>가장 가까워`;
   document.getElementById('result-sub').textContent = `${selectedSubjects.length}개 과목 중 성향과 가까운 순서로 정리했어`;
 
-  renderResultCards(scores);
-  renderTraitChips();
-  renderStoryCard();
-  renderAnalysis(scores);
-}
-
-function renderResultCards(scores) {
-  const cardsEl = document.getElementById('result-cards');
-
-  cardsEl.innerHTML = scores.map((s, i) => {
-    const fillClass = i === 0 ? '' : (i === 1 ? ' mid' : ' low');
-    const pctClass = i === 0 ? '' : (i === 1 ? ' mid' : ' low');
-    const rankClass = i === 0 ? ' first' : '';
-    const rankText = i === 0 ? '1st' : (i === 1 ? '2nd' : (i + 1) + 'th');
+  const ranks = ['1st','2nd','3rd','4th'];
+  document.getElementById('result-cards').innerHTML = scores.map((s, i) => {
+    const fc = i === 0 ? '' : i === 1 ? ' mid' : ' low';
+    const pc = i === 0 ? '' : i === 1 ? ' mid' : ' low';
     const reasons = getSubjectReasons(s.name);
-
-    return `
-      <div class="result-card${i === 0 ? ' top' : ''}" style="animation:fadeUp 0.4s ${i * 0.08}s both">
-        <div class="result-card-header">
-          <span class="result-rank${rankClass}">${rankText}</span>
-          <span class="result-subject-name">${s.label}</span>
-          <span class="result-pct${pctClass}">${s.pct}%</span>
-        </div>
-        <div class="score-bar"><div class="score-fill${fillClass}" id="fill-${i}"></div></div>
-        <div class="result-reasons">
-          ${reasons.map(reason => `
-            <div class="reason-row">
-              <div class="reason-dot${i > 0 ? ' dim' : ''}"></div>
-              <span>${reason}</span>
-            </div>
-          `).join('')}
-        </div>
+    return `<div class="result-card${i===0?' top':''}" style="animation:fadeUp 0.4s ${i*0.08}s both">
+      <div class="result-card-header">
+        <span class="result-rank${i===0?' first':''}">${ranks[i]}</span>
+        <span class="result-subject-name">${s.label}</span>
+        <span class="result-pct${pc}">${s.pct}%</span>
       </div>
-    `;
+      <div class="score-bar"><div class="score-fill${fc}" id="fill-${i}"></div></div>
+      <div class="result-reasons">${reasons.map(r=>`
+        <div class="reason-row">
+          <div class="reason-dot${i>0?' dim':''}"></div>
+          <span>${r}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
   }).join('');
 
   setTimeout(() => {
@@ -1308,126 +925,34 @@ function renderResultCards(scores) {
       if (el) el.style.width = s.pct + '%';
     });
   }, 300);
-}
 
-function renderTraitChips() {
+  // 주요 성향 칩
   const topTraits = getTopTraits(5);
-  const traitList = document.getElementById('trait-list');
+  document.getElementById('trait-list').innerHTML = topTraits.length
+    ? topTraits.map(t => `<span class="trait-chip">${t.trait} ${t.score.toFixed(1)}/3</span>`).join('')
+    : '<span class="trait-chip">균형형</span>';
 
-  if (topTraits.length === 0) {
-    traitList.innerHTML = '<span class="trait-chip">균형형</span>';
-    return;
-  }
-
-  traitList.innerHTML = topTraits.map(item => {
-    return `<span class="trait-chip">${item.trait} ${item.score.toFixed(1)}/3</span>`;
-  }).join('');
-}
-
-function getStoryType() {
-  const sortedTraits = Object.entries(traitScores)
-    .sort((a, b) => b[1] - a[1]);
-
-  const topTrait = sortedTraits[0]?.[0];
-
-  const typeMap = {
-    공간직관: {
-      title: '공간 직관형',
-      subtitle: '도형과 공간을 이미지처럼 떠올리는 타입',
-      subjects: ['고급기하', '기하']
-    },
-    함수사고: {
-      title: '함수 흐름형',
-      subtitle: '변화의 흐름과 구조를 읽는 타입',
-      subjects: ['고급미적분', '미적분Ⅱ']
-    },
-    논리증명: {
-      title: '논리 탐구형',
-      subtitle: '답보다 원리를 끝까지 파고드는 타입',
-      subjects: ['고급대수', '이산수학']
-    },
-    데이터분석: {
-      title: '데이터 분석형',
-      subtitle: '숫자 속 패턴과 근거를 읽는 타입',
-      subjects: ['실용통계', '인공지능 수학']
-    },
-    현실응용: {
-      title: '현실 응용형',
-      subtitle: '수학이 현실에서 쓰이는 방식에 끌리는 타입',
-      subjects: ['경제 수학', '직무 수학']
-    },
-    창의융합: {
-      title: '융합 창의형',
-      subtitle: '수학을 다양한 분야와 연결해보는 타입',
-      subjects: ['수학과 문화', '수학과제 탐구']
-    },
-    탐구자기주도: {
-      title: '자기주도 탐구형',
-      subtitle: '스스로 질문하고 끝까지 파고드는 타입',
-      subjects: ['수학과제 탐구', '전문 수학']
-    },
-    디지털AI: {
-      title: '디지털 사고형',
-      subtitle: 'AI와 알고리즘 구조에 흥미를 느끼는 타입',
-      subjects: ['인공지능 수학', '이산수학']
-    },
-    계산지속력: {
-      title: '집중 몰입형',
-      subtitle: '긴 계산도 끝까지 밀고 가는 타입',
-      subjects: ['고급미적분', '전문 수학']
-    },
-    도전성향: {
-      title: '도전 성장형',
-      subtitle: '어려워도 흥미 있으면 파고드는 타입',
-      subjects: ['고급기하', '고급미적분']
-    }
-  };
-
-  return typeMap[topTrait] || {
-    title: '균형 성장형',
-    subtitle: '다양한 방식으로 수학을 받아들이는 타입',
-    subjects: ['전문 수학', '수학과제 탐구']
-  };
-}
-
-function renderStoryCard() {
+  // 스토리 카드
   const type = getStoryType();
-
-  document.getElementById('story-type').innerHTML = type.title;
+  document.getElementById('story-type').textContent = type.title;
   document.getElementById('story-subtitle').textContent = type.subtitle;
   document.getElementById('story-subjects').textContent = type.subjects.join(' · ');
-}
 
-function renderAnalysis(scores) {
-  const top = scores[0];
-  const second = scores[1];
-  const topTraits = getTopTraits(3).map(item => item.trait);
-
-  let text = '';
-
-  if (topTraits.length > 0) {
-    text += `너는 ${topTraits.join(', ')} 성향이 비교적 잘 드러나는 편이야. `;
-  } else {
-    text += '특정 성향으로 강하게 치우치기보다는 비교적 균형 잡힌 편이야. ';
-  }
-
+  // 종합 분석
+  const topTraitNames = getTopTraits(3).map(t => t.trait);
+  let text = topTraitNames.length
+    ? `너는 ${topTraitNames.join(', ')} 성향이 비교적 잘 드러나는 편이야. `
+    : '특정 성향으로 강하게 치우치기보다는 비교적 균형 잡힌 편이야. ';
   text += `${SUBJECTS[top.name].label}은(는) ${SUBJECTS[top.name].summary} `;
-
+  const second = scores[1];
   if (second) {
-    const gap = top.pct - second.pct;
-    if (gap <= 5) {
-      text += `다만 ${SUBJECTS[second.name].label}와의 차이가 크지 않아서, 학교의 실제 평가 방식이나 본인의 흥미를 함께 고려하는 게 좋아.`;
-    } else {
-      text += `선택한 과목들 중에서는 ${SUBJECTS[top.name].label} 쪽이 현재 응답과 가장 자연스럽게 맞아 보여.`;
-    }
+    text += (top.pct - second.pct) <= 5
+      ? `다만 ${SUBJECTS[second.name].label}와의 차이가 크지 않아서, 학교의 실제 평가 방식이나 본인의 흥미를 함께 고려하는 게 좋아.`
+      : `선택한 과목들 중에서는 ${SUBJECTS[top.name].label} 쪽이 현재 응답과 가장 자연스럽게 맞아 보여.`;
   }
-
   document.getElementById('ai-text').textContent = text;
 }
 
-// ============================================================
-// 9. 기타 기능
-// ============================================================
 function restart() {
   selectedSubjects = [];
   currentQuestions = [];
@@ -1435,192 +960,131 @@ function restart() {
   traitScores = {};
   traitCounts = {};
   lastScores = [];
-
+  answerHistory = [];
   document.querySelectorAll('.subject-card.selected').forEach(el => el.classList.remove('selected'));
   document.getElementById('count').textContent = '0';
   document.getElementById('btn-next').disabled = true;
   document.getElementById('progress-fill').style.width = '0%';
-
   goTo('screen-landing');
 }
 
+// ── 이미지 캡처 (html2canvas) ──
 async function createImageBlob(targetId, hideSelectors = []) {
   const target = document.getElementById(targetId);
-
   if (!target || typeof html2canvas === 'undefined') {
     alert('이미지 저장 기능을 불러오지 못했어. 잠시 후 다시 시도해줘.');
     return null;
   }
-
-  // 캡처에 포함하지 않을 요소 잠시 숨김
   const hiddenItems = [];
-  hideSelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
+  hideSelectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
       hiddenItems.push({ el, display: el.style.display });
       el.style.display = 'none';
     });
   });
-
-  // 애니메이션 때문에 일부 카드가 투명하게 캡처되는 현상 방지
   const animatedEls = target.querySelectorAll('.result-card, .q-text, .answer-btn');
-  const originalAnimations = [];
+  const origAnims = [];
   animatedEls.forEach(el => {
-    originalAnimations.push({
-      el: el,
-      animation: el.style.animation,
-      opacity: el.style.opacity,
-      transform: el.style.transform
-    });
-    el.style.animation = 'none';
-    el.style.opacity = '1';
-    el.style.transform = 'none';
+    origAnims.push({ el, animation: el.style.animation, opacity: el.style.opacity, transform: el.style.transform });
+    el.style.animation = 'none'; el.style.opacity = '1'; el.style.transform = 'none';
   });
-
-  const originalOverflow = target.style.overflow;
-  const originalHeight = target.style.height;
-  const originalMinHeight = target.style.minHeight;
-
+  const origOverflow = target.style.overflow;
   target.style.overflow = 'visible';
-  target.style.height = 'auto';
-  target.style.minHeight = 'auto';
-
-  const rect = target.getBoundingClientRect();
-  const width = Math.ceil(target.scrollWidth || rect.width);
-  const height = Math.ceil(target.scrollHeight || rect.height);
 
   const canvas = await html2canvas(target, {
-    backgroundColor: '#ffffff',
-    scale: 2,
-    useCORS: true,
-    width: width,
-    height: height,
-    windowWidth: width,
-    windowHeight: height,
-    scrollX: 0,
-    scrollY: -window.scrollY
+    backgroundColor: '#ffffff', scale: 2, useCORS: true,
+    scrollX: 0, scrollY: -window.scrollY
   });
 
-  target.style.overflow = originalOverflow;
-  target.style.height = originalHeight;
-  target.style.minHeight = originalMinHeight;
-
-  originalAnimations.forEach(item => {
+  target.style.overflow = origOverflow;
+  origAnims.forEach(item => {
     item.el.style.animation = item.animation;
     item.el.style.opacity = item.opacity;
     item.el.style.transform = item.transform;
   });
+  hiddenItems.forEach(item => { item.el.style.display = item.display; });
 
-  hiddenItems.forEach(item => {
-    item.el.style.display = item.display;
-  });
-
-  return new Promise(resolve => {
-    canvas.toBlob(blob => resolve(blob), 'image/png');
-  });
+  return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
 }
 
-async function createResultImageBlob() {
-  return createImageBlob('screen-result', [
-    '#story-card',
-    '.story-share-row',
-    '.detail-share-row',
-    '.retry-row',
-    '.result-actions'
-  ]);
-}
-
+// ── 스토리 카드: Canvas API로 직접 그리기 (수정됨) ──
 async function createStoryImageBlob() {
   const type = getStoryType();
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
 
-  if (typeof html2canvas === 'undefined') {
-    alert('이미지 저장 기능을 불러오지 못했어. 잠시 후 다시 시도해줘.');
-    return null;
-  }
+  // 배경 그라데이션
+  const grad = ctx.createLinearGradient(0, 0, 0, 1920);
+  grad.addColorStop(0, '#f8fbff');
+  grad.addColorStop(1, '#eef5fc');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 1080, 1920);
 
-  // 화면에 보이는 카드와 공유용 이미지를 분리해서 만든다.
-  // 이렇게 해야 인스타 스토리용 9:16 이미지가 한쪽으로 치우치지 않고 정확히 저장된다.
-  const exportCard = document.createElement('div');
-  exportCard.style.position = 'fixed';
-  exportCard.style.left = '-9999px';
-  exportCard.style.top = '0';
-  exportCard.style.width = '1080px';
-  exportCard.style.height = '1920px';
-  exportCard.style.background = 'linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%)';
-  exportCard.style.display = 'flex';
-  exportCard.style.flexDirection = 'column';
-  exportCard.style.justifyContent = 'center';
-  exportCard.style.alignItems = 'center';
-  exportCard.style.textAlign = 'center';
-  exportCard.style.fontFamily = "'Noto Sans KR', sans-serif";
-  exportCard.style.color = '#1a1a1a';
-  exportCard.style.padding = '120px';
+  await document.fonts.ready;
+  ctx.textAlign = 'center';
 
-  exportCard.innerHTML = `
-    <div style="font-size:24px;letter-spacing:0.34em;color:#7f8da3;margin-bottom:58px;">TEUIDA MATH</div>
-    <div style="font-size:82px;font-weight:800;line-height:1.25;color:#1a1a1a;margin-bottom:30px;letter-spacing:-0.04em;">${type.title}</div>
-    <div style="font-size:36px;line-height:1.7;color:#5f6b7a;margin-bottom:82px;max-width:760px;font-weight:500;">${type.subtitle}</div>
-    <div style="width:120px;height:2px;background:#c8d8ea;margin-bottom:82px;"></div>
-    <div style="font-size:26px;letter-spacing:0.18em;color:#8b97a5;margin-bottom:32px;">RECOMMENDED</div>
-    <div style="font-size:52px;font-weight:800;line-height:1.45;color:#185fa5;letter-spacing:-0.04em;">${type.subjects.join(' · ')}</div>
-    <div style="position:absolute;bottom:120px;font-size:26px;color:#9aa3ad;letter-spacing:0.08em;">나에게 더 잘 맞는 선택 과목은?</div>
-  `;
+  // TEUIDA MATH 워드마크
+  ctx.font = '400 28px "Noto Sans KR"';
+  ctx.fillStyle = '#7f8da3';
+  ctx.fillText('TEUIDA MATH', 540, 420);
 
-  document.body.appendChild(exportCard);
+  // 타입 제목
+  ctx.font = '700 96px "Noto Sans KR"';
+  ctx.fillStyle = '#1a1a1a';
+  const titleLines = type.title.length > 6
+    ? [type.title.slice(0, Math.ceil(type.title.length / 2)), type.title.slice(Math.ceil(type.title.length / 2))]
+    : [type.title];
+  titleLines.forEach((line, i) => ctx.fillText(line, 540, 560 + i * 110));
 
-  const canvas = await html2canvas(exportCard, {
-    backgroundColor: '#ffffff',
-    scale: 1,
-    useCORS: true,
-    width: 1080,
-    height: 1920,
-    windowWidth: 1080,
-    windowHeight: 1920,
-    scrollX: 0,
-    scrollY: 0
-  });
+  // 서브타이틀
+  ctx.font = '400 38px "Noto Sans KR"';
+  ctx.fillStyle = '#5f6b7a';
+  const subY = titleLines.length > 1 ? 820 : 720;
+  ctx.fillText(type.subtitle, 540, subY);
 
-  exportCard.remove();
+  // 구분선
+  ctx.strokeStyle = '#c8d8ea';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(480, subY + 80);
+  ctx.lineTo(600, subY + 80);
+  ctx.stroke();
 
-  return new Promise(resolve => {
-    canvas.toBlob(blob => resolve(blob), 'image/png');
-  });
-}
+  // RECOMMENDED 라벨
+  ctx.font = '500 26px "Noto Sans KR"';
+  ctx.fillStyle = '#8b97a5';
+  ctx.fillText('RECOMMENDED', 540, subY + 160);
 
-async function saveResultImage() {
-  const blob = await createResultImageBlob();
-  if (!blob) return;
+  // 추천 과목
+  ctx.font = '700 56px "Noto Sans KR"';
+  ctx.fillStyle = '#185fa5';
+  ctx.fillText(type.subjects.join(' · '), 540, subY + 260);
 
-  const top = lastScores[0]?.label || 'result';
-  const fileName = `teuida-math-${top}-result.png`;
-  const url = URL.createObjectURL(blob);
+  // 하단 문구
+  ctx.font = '400 28px "Noto Sans KR"';
+  ctx.fillStyle = '#9aa3ad';
+  ctx.fillText('나에게 더 잘 맞는 선택 과목은?', 540, 1800);
 
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-
-  URL.revokeObjectURL(url);
+  return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
 }
 
 async function shareDetailResult() {
-  const blob = await createResultImageBlob();
+  const blob = await createImageBlob('screen-result', [
+    '#story-card', '.story-share-row', '.detail-share-row', '.retry-row'
+  ]);
   if (!blob) return;
-
   const top = lastScores[0]?.label || 'result';
   const file = new File([blob], `teuida-math-${top}-detail.png`, { type: 'image/png' });
-
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-      });
-    } catch (error) {
-      // 공유 취소 시 조용히 종료
-    }
+    try { await navigator.share({ files: [file] }); } catch(e) {}
   } else {
-    await saveResultImage();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = file.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
     alert('상세 결과 이미지를 저장했어. 카카오톡이나 메시지로 직접 보내줘!');
   }
 }
@@ -1628,72 +1092,17 @@ async function shareDetailResult() {
 async function shareStoryCard() {
   const blob = await createStoryImageBlob();
   if (!blob) return;
-
   const typeName = document.getElementById('story-type')?.textContent || 'type';
   const file = new File([blob], `teuida-math-${typeName}.png`, { type: 'image/png' });
-
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-      });
-    } catch (error) {
-      // 공유 취소 시 조용히 종료
-    }
+    try { await navigator.share({ files: [file] }); } catch(e) {}
   } else {
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `teuida-math-${typeName}.png`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    const a = document.createElement('a');
+    a.href = url; a.download = file.name;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
     alert('스토리 카드를 저장했어. 인스타그램 스토리에서 선택해서 올려줘!');
-  }
-}
-
-async function shareResult() {
-  const blob = await createResultImageBlob();
-  if (!blob) return;
-
-  const top = lastScores[0]?.label || 'result';
-  const file = new File([blob], `teuida-math-${top}-result.png`, { type: 'image/png' });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-      });
-    } catch (error) {
-      // 공유 취소 시 조용히 종료
-    }
-  } else {
-    await saveResultImage();
-    alert('이미지를 저장했어. 카카오톡이나 인스타그램에서 직접 공유해줘!');
-  }
-}
-
-async function shareInstagramStory() {
-  const blob = await createResultImageBlob();
-  if (!blob) return;
-
-  const top = lastScores[0]?.label || 'result';
-  const file = new File([blob], `teuida-math-${top}-result.png`, { type: 'image/png' });
-
-  // 모바일 브라우저에서 지원되면 공유창 열기
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-        text: '나에게 더 잘 맞는 선택 과목은?'
-      });
-    } catch (error) {
-      // 사용자가 공유를 취소한 경우도 있어서 조용히 처리
-    }
-  } else {
-    await saveResultImage();
-    alert('이미지를 저장했어. 인스타그램 스토리에서 저장된 이미지를 선택해서 올려줘!');
   }
 }
 </script>
