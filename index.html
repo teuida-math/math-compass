@@ -796,7 +796,7 @@
       </div>
     </div>
 
-    <div class="share-row" style="margin-top:1rem;">
+    <div class="share-row retry-row" style="margin-top:1rem;">
       <button class="icon-btn" onclick="restart()" aria-label="Retry">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20 11a8 8 0 1 0-2.34 5.66" stroke-linecap="round"/>
@@ -913,7 +913,7 @@ const ALL_QUESTIONS = [
   { id: 5, trait: '계산지속력', reverse: false, text: '여러 단계를 차근차근 밀어가는 문제에 강한 편이다' },
   { id: 6, trait: '계산지속력', reverse: true, text: '계산 실수 때문에 아는 문제를 자주 틀린다' },
 
-  { id: 7, trait: '함수사고', reverse: false, text: '함수 개형의 변화가 눈에 잘 들어오는 편이다.' },
+  { id: 7, trait: '함수사고', reverse: false, text: '그래프를 보면 어디서 어떻게 변하는지가 먼저 눈에 들어온다' },
   { id: 8, trait: '함수사고', reverse: false, text: '식만 보는 것보다 그래프로 보면 이해가 더 잘 된다' },
   { id: 9, trait: '함수사고', reverse: false, text: '함수 문제는 계산보다 흐름 이해가 더 중요하다고 느낀다' },
   { id: 10, trait: '함수사고', reverse: true, text: '그래프가 복잡해지면 갑자기 흐름이 끊긴다' },
@@ -1511,12 +1511,28 @@ async function createResultImageBlob() {
     '#story-card',
     '.story-share-row',
     '.detail-share-row',
+    '.retry-row',
     '.result-actions'
   ]);
 }
 
 async function createStoryImageBlob() {
-  return createImageBlob('story-card');
+  const storyCard = document.getElementById('story-card');
+  if (!storyCard) return null;
+
+  const originalRadius = storyCard.style.borderRadius;
+  const originalMargin = storyCard.style.marginBottom;
+
+  // 공유용 이미지는 인스타 스토리 비율에 맞게 꽉 찬 직사각형으로 저장
+  storyCard.style.borderRadius = '0';
+  storyCard.style.marginBottom = '0';
+
+  const blob = await createImageBlob('story-card');
+
+  storyCard.style.borderRadius = originalRadius;
+  storyCard.style.marginBottom = originalMargin;
+
+  return blob;
 }
 
 async function saveResultImage() {
@@ -1548,7 +1564,6 @@ async function shareDetailResult() {
     try {
       await navigator.share({
         files: [file],
-        title: '트이다 수학 선택 나침반 상세 결과',
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
@@ -1570,7 +1585,6 @@ async function shareStoryCard() {
     try {
       await navigator.share({
         files: [file],
-        title: '트이다 수학 선택 나침반',
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
@@ -1599,7 +1613,6 @@ async function shareResult() {
     try {
       await navigator.share({
         files: [file],
-        title: '트이다 수학 선택 나침반',
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
@@ -1622,7 +1635,6 @@ async function shareInstagramStory() {
     try {
       await navigator.share({
         files: [file],
-        title: '트이다 수학 선택 나침반',
         text: '나에게 더 잘 맞는 선택 과목은?'
       });
     } catch (error) {
