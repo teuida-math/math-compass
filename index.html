@@ -358,12 +358,15 @@
   .answer-btn:nth-child(2) { animation: fadeUp 0.4s 0.12s forwards; }
   .answer-btn:nth-child(3) { animation: fadeUp 0.4s 0.19s forwards; }
   .answer-btn:nth-child(4) { animation: fadeUp 0.4s 0.26s forwards; }
-  .answer-btn:hover {
-    border-color: #185fa5;
-    background: #f3f8fd;
-    color: #0f4c81;
-    background: #f3f8fd;
-    color: #185fa5;
+  @media (hover: hover) and (pointer: fine) {
+    .answer-btn:hover {
+      border-color: #185fa5;
+      background: #f3f8fd;
+      color: #0f4c81;
+    }
+  }
+  .answer-btn:focus {
+    outline: none;
   }
 
   /* ── 결과 ── */
@@ -1129,6 +1132,16 @@ function renderQuestion() {
 }
 
 function selectAnswer(rawScore) {
+  // 모바일에서 이전 답변 버튼의 hover/focus 상태가 다음 질문에 남는 현상 방지
+  if (document.activeElement && document.activeElement.blur) {
+    document.activeElement.blur();
+  }
+
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    btn.blur();
+  });
+
   const q = currentQuestions[currentQIdx];
   const finalScore = q.reverse ? 3 - rawScore : rawScore;
 
