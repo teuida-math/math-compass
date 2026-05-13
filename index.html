@@ -9,7 +9,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #f5f5f3;
+    background: #ffffff;
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #1a1a1a;
     min-height: 100vh;
@@ -110,7 +110,7 @@
   /* ── 랜딩 ── */
   #screen-landing {
     min-height: 100vh;
-    background: #0d1130;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,7 +122,7 @@
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.4em;
-    color: rgba(255,255,255,0.35);
+    color: #9aa3ad;
     text-transform: uppercase;
     margin-bottom: 3rem;
   }
@@ -130,15 +130,15 @@
     font-family: 'Noto Serif KR', serif;
     font-size: clamp(28px, 6vw, 42px);
     font-weight: 300;
-    color: #f0ede8;
+    color: #1a1a1a;
     line-height: 1.7;
     letter-spacing: 0.02em;
     margin-bottom: 1.2rem;
   }
-  .landing-title strong { font-weight: 400; color: #fff; }
+  .landing-title strong { font-weight: 500; color: #185fa5; }
   .landing-desc {
     font-size: 13px;
-    color: rgba(255,255,255,0.4);
+    color: #777;
     line-height: 1.9;
     letter-spacing: 0.02em;
     margin-bottom: 3.5rem;
@@ -508,7 +508,7 @@
   .trait-chip {
     font-size: 12px;
     color: #555;
-    background: #f5f5f3;
+    background: #f7f8fa;
     border-radius: 999px;
     padding: 5px 10px;
   }
@@ -541,33 +541,19 @@
 </head>
 <body>
 
-<!-- 인트로 -->
-<div id="intro">
-  <div id="intro-wordmark">TEUIDA MATH</div>
-  <div id="intro-text">
-    <span class="phrase" id="p0">내가 고를 수학,<br>어디서부터 시작하지?</span>
-    <span class="phrase" id="p1">마침내, 나의 수학이 트인다.</span>
-  </div>
-  <div id="intro-progress">
-    <div class="dot" id="d0"></div>
-    <div class="dot" id="d1"></div>
-  </div>
-  <button id="intro-skip" onclick="skipIntro()">SKIP ›</button>
-</div>
-
 <!-- 본문 -->
-<div id="main">
+<div id="main" class="visible">
 
   <!-- 랜딩 -->
   <div id="screen-landing" class="screen active">
-    <div class="landing-badge">TEUIDA MATH · 수학 선택 나침반</div>
-    <div class="landing-title">
-      2022 개정 수학<br>
-      <strong>뭘 선택해야 할까?</strong>
+    <div class="landing-badge">TEUIDA MATH · 선택과목 성향 테스트</div>
+    <div class="landing-title" style="font-family:'Noto Sans KR',sans-serif;font-weight:500;line-height:1.45;letter-spacing:-0.03em;">
+      나에게 더 잘 맞는<br>
+      <strong>선택 과목은?</strong>
     </div>
     <div class="landing-desc">
-      고민 중인 과목 2~4개를 골라봐.<br>
-      네 성향에 맞는 과목을 찾아줄게.
+      교육과정 자료를 바탕으로 만든 성향 기반 진단이야.<br>
+      고민 중인 과목 2~4개를 골라 비교해봐.
     </div>
     <button class="landing-btn" onclick="goTo('screen-select')">진단 시작하기</button>
   </div>
@@ -897,59 +883,8 @@ let lastScores = [];
 let answerHistory = [];
 
 // ============================================================
-// 5. 인트로
+// 5. 인트로 없음: 바로 랜딩 화면 표시
 // ============================================================
-let timers = [];
-let skipped = false;
-
-function runIntro() {
-  const wordmark = document.getElementById('intro-wordmark');
-  const p0 = document.getElementById('p0');
-  const p1 = document.getElementById('p1');
-  const d0 = document.getElementById('d0');
-  const d1 = document.getElementById('d1');
-
-  timers.push(setTimeout(() => {
-    if (skipped) return;
-    wordmark.style.opacity = 1;
-    p0.style.opacity = 1;
-    d0.classList.add('active');
-  }, 300));
-
-  timers.push(setTimeout(() => {
-    if (skipped) return;
-    p0.style.opacity = 0;
-    d0.classList.remove('active');
-  }, 1700));
-
-  timers.push(setTimeout(() => {
-    if (skipped) return;
-    p1.style.opacity = 1;
-    d1.classList.add('active');
-  }, 2000));
-
-  timers.push(setTimeout(() => {
-    if (skipped) return;
-    finishIntro();
-  }, 3400));
-}
-
-function finishIntro() {
-  const intro = document.getElementById('intro');
-  intro.classList.add('leaving');
-  setTimeout(() => {
-    intro.style.display = 'none';
-    document.getElementById('main').classList.add('visible');
-  }, 700);
-}
-
-function skipIntro() {
-  skipped = true;
-  timers.forEach(clearTimeout);
-  finishIntro();
-}
-
-runIntro();
 
 // ============================================================
 // 6. 화면 전환 및 선택
