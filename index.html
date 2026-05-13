@@ -693,8 +693,18 @@
       최종 선택은 학교 개설 여부, 평가 방식, 담임 선생님 상담을 함께 고려해줘.
     </div>
 
+    <div id="story-card" style="margin-bottom:1.8rem;background:linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%);border-radius:28px;padding:42px 28px;text-align:center;position:relative;overflow:hidden;aspect-ratio:9/16;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+      <div style="font-size:11px;letter-spacing:0.28em;color:#7f8da3;margin-bottom:22px;">TEUIDA MATH</div>
+      <div id="story-type" style="font-size:34px;font-weight:700;line-height:1.35;color:#1a1a1a;margin-bottom:10px;"></div>
+      <div id="story-subtitle" style="font-size:15px;line-height:1.8;color:#5f6b7a;margin-bottom:30px;max-width:260px;"></div>
+      <div style="width:56px;height:1px;background:#c8d8ea;margin-bottom:30px;"></div>
+      <div style="font-size:12px;letter-spacing:0.14em;color:#8b97a5;margin-bottom:12px;">RECOMMENDED</div>
+      <div id="story-subjects" style="font-size:20px;font-weight:600;line-height:1.7;color:#185fa5;"></div>
+      <div style="position:absolute;bottom:26px;font-size:11px;color:#9aa3ad;letter-spacing:0.08em;">나에게 더 잘 맞는 선택 과목은?</div>
+    </div>
+
     <div class="result-actions">
-      <button class="btn-primary" onclick="saveResultImage()">결과 이미지 저장</button>
+      <button class="btn-primary" onclick="shareResultToMe()">나에게 보내기</button>
       <button class="btn-outline" onclick="shareInstagramStory()">인스타 스토리 공유</button>
       <button class="btn-outline" onclick="restart()">다시 해보기</button>
     </div>
@@ -928,26 +938,51 @@ function pickQuestionsBySelectedSubjects(subjects) {
     });
   });
 
+  // 1) 대표 성향을 잡기 위한 공통 질문
+  // 비교군에 너무 끌려가지 않도록 주요 trait을 한 번씩 확인한다.
+  const commonQuestionIds = [
+    1,   // 계산지속력
+    7,   // 함수사고
+    14,  // 공간직관
+    19,  // 논리증명
+    25,  // 데이터분석
+    32,  // 탐구자기주도
+    37,  // 현실응용
+    55   // 디지털AI
+  ];
+
+  const picked = commonQuestionIds
+    .map(id => ALL_QUESTIONS.find(q => q.id === id))
+    .filter(Boolean);
+
+  // 2) 사용자가 고른 비교군을 더 잘 가르기 위한 맞춤 질문
   const importantTraits = Object.entries(traitImportance)
     .sort((a, b) => b[1] - a[1])
-    .map(([trait]) => trait)
-    .slice(0, 6);
-
-  const picked = [];
+    .map(([trait]) => trait);
 
   importantTraits.forEach(trait => {
-    const candidates = ALL_QUESTIONS.filter(q => q.trait === trait);
-    const normalQuestions = candidates.filter(q => !q.reverse);
-    const reverseQuestions = candidates.filter(q => q.reverse);
+    if (picked.length >= 15) return;
 
-    const normal = normalQuestions[picked.length % normalQuestions.length];
-    const reverse = reverseQuestions[0];
+    const candidates = ALL_QUESTIONS.filter(q => {
+      const alreadyPicked = picked.some(p => p.id === q.id);
+      return q.trait === trait && !alreadyPicked;
+    });
 
-    if (normal) picked.push(normal);
-    if (reverse && picked.length < 10) picked.push(reverse);
+    // 비교군 질문에는 역문항을 우선 1개 섞어서 응답 편향을 줄인다.
+    const reverse = candidates.find(q => q.reverse);
+    const normal = candidates.find(q => !q.reverse);
+
+    if (reverse && picked.length < 15) picked.push(reverse);
+    if (normal && picked.length < 15) picked.push(normal);
   });
 
-  return picked.slice(0, 8);
+  // 3) 그래도 15개가 안 차면 전체 문항에서 보충
+  ALL_QUESTIONS.forEach(q => {
+    if (picked.length >= 15) return;
+    if (!picked.some(p => p.id === q.id)) picked.push(q);
+  });
+
+  return picked.slice(0, 15);
 }
 
 function startQuiz() {
@@ -1120,6 +1155,7 @@ function showResult() {
 
   renderResultCards(scores);
   renderTraitChips();
+  renderStoryCard();
   renderAnalysis(scores);
 }
 
@@ -1173,6 +1209,80 @@ function renderTraitChips() {
   traitList.innerHTML = topTraits.map(item => {
     return `<span class="trait-chip">${item.trait} ${item.score.toFixed(1)}/3</span>`;
   }).join('');
+}
+
+function getStoryType() {
+  const sortedTraits = Object.entries(traitScores)
+    .sort((a, b) => b[1] - a[1]);
+
+  const topTrait = sortedTraits[0]?.[0];
+
+  const typeMap = {
+    공간직관: {
+      title: '공간 직관형',
+      subtitle: '도형과 공간을 이미지처럼 떠올리는 타입',
+      subjects: ['고급기하', '기하']
+    },
+    함수사고: {
+      title: '함수 흐름형',
+      subtitle: '변화의 흐름과 구조를 읽는 타입',
+      subjects: ['고급미적분', '미적분Ⅱ']
+    },
+    논리증명: {
+      title: '논리 탐구형',
+      subtitle: '답보다 원리를 끝까지 파고드는 타입',
+      subjects: ['고급대수', '이산수학']
+    },
+    데이터분석: {
+      title: '데이터 분석형',
+      subtitle: '숫자 속 패턴과 근거를 읽는 타입',
+      subjects: ['실용통계', '인공지능 수학']
+    },
+    현실응용: {
+      title: '현실 응용형',
+      subtitle: '수학이 현실에서 쓰이는 방식에 끌리는 타입',
+      subjects: ['경제 수학', '직무 수학']
+    },
+    창의융합: {
+      title: '융합 창의형',
+      subtitle: '수학을 다양한 분야와 연결해보는 타입',
+      subjects: ['수학과 문화', '수학과제 탐구']
+    },
+    탐구자기주도: {
+      title: '자기주도 탐구형',
+      subtitle: '스스로 질문하고 끝까지 파고드는 타입',
+      subjects: ['수학과제 탐구', '전문 수학']
+    },
+    디지털AI: {
+      title: '디지털 사고형',
+      subtitle: 'AI와 알고리즘 구조에 흥미를 느끼는 타입',
+      subjects: ['인공지능 수학', '이산수학']
+    },
+    계산지속력: {
+      title: '집중 몰입형',
+      subtitle: '긴 계산도 끝까지 밀고 가는 타입',
+      subjects: ['고급미적분', '전문 수학']
+    },
+    도전성향: {
+      title: '도전 성장형',
+      subtitle: '어려워도 흥미 있으면 파고드는 타입',
+      subjects: ['고급기하', '고급미적분']
+    }
+  };
+
+  return typeMap[topTrait] || {
+    title: '균형 성장형',
+    subtitle: '다양한 방식으로 수학을 받아들이는 타입',
+    subjects: ['전문 수학', '수학과제 탐구']
+  };
+}
+
+function renderStoryCard() {
+  const type = getStoryType();
+
+  document.getElementById('story-type').innerHTML = type.title;
+  document.getElementById('story-subtitle').textContent = type.subtitle;
+  document.getElementById('story-subjects').textContent = type.subjects.join(' · ');
 }
 
 function renderAnalysis(scores) {
@@ -1306,6 +1416,29 @@ async function saveResultImage() {
   link.remove();
 
   URL.revokeObjectURL(url);
+}
+
+async function shareResultToMe() {
+  const blob = await createResultImageBlob();
+  if (!blob) return;
+
+  const top = lastScores[0]?.label || 'result';
+  const file = new File([blob], `teuida-math-${top}-result.png`, { type: 'image/png' });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: '트이다 수학 선택 나침반 결과',
+        text: '나에게 더 잘 맞는 선택 과목 결과를 확인해봤어.'
+      });
+    } catch (error) {
+      // 공유 취소 시 조용히 종료
+    }
+  } else {
+    await saveResultImage();
+    alert('이미지를 저장했어. 카카오톡이나 메시지로 직접 보내줘!');
+  }
 }
 
 async function shareInstagramStory() {
