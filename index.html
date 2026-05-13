@@ -277,7 +277,7 @@
   /* ── 질문 ── */
   #screen-quiz {
     min-height: 100vh;
-    background: #0d1130;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -287,8 +287,8 @@
   .quiz-inner { width: 100%; max-width: 520px; }
   .progress-bar {
     width: 100%;
-    height: 2px;
-    background: rgba(255,255,255,0.1);
+    height: 3px;
+    background: #edf1f5;
     border-radius: 1px;
     margin-bottom: 3rem;
     overflow: hidden;
@@ -307,22 +307,23 @@
   }
   .quiz-tag {
     font-size: 11px;
-    padding: 3px 10px;
-    border: 1px solid rgba(255,255,255,0.15);
+    padding: 4px 11px;
+    border: 1px solid #dbe6f2;
     border-radius: 20px;
-    color: rgba(255,255,255,0.4);
+    color: #5f6b7a;
+    background:#f8fbff;
   }
   .q-counter {
     font-size: 11px;
     letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.3);
+    color: #9aa3ad;
     margin-bottom: 1.5rem;
   }
   .q-text {
     font-family: 'Noto Serif KR', serif;
     font-size: clamp(19px, 4vw, 25px);
     font-weight: 300;
-    color: #f0ede8;
+    color: #1a1a1a;
     line-height: 1.7;
     margin-bottom: 2.5rem;
     letter-spacing: 0.01em;
@@ -339,9 +340,9 @@
     gap: 10px;
   }
   .answer-btn {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.75);
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    color: #444;
     padding: 16px 20px;
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
@@ -359,8 +360,8 @@
   .answer-btn:nth-child(4) { animation: fadeUp 0.4s 0.26s forwards; }
   .answer-btn:hover {
     border-color: #185fa5;
-    background: rgba(24,95,165,0.15);
-    color: #fff;
+    background: #f3f8fd;
+    color: #185fa5;
   }
 
   /* ── 결과 ── */
@@ -370,7 +371,7 @@
     margin: 0 auto;
   }
   .result-top-bar {
-    background: #0d1130;
+    background: linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%);
     padding: 2.5rem 1.5rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -379,7 +380,7 @@
   .result-eyebrow {
     font-size: 11px;
     letter-spacing: 0.3em;
-    color: rgba(255,255,255,0.35);
+    color: #8b97a5;
     text-transform: uppercase;
     margin-bottom: 1rem;
   }
@@ -387,7 +388,7 @@
     font-family: 'Noto Serif KR', serif;
     font-size: clamp(22px, 5vw, 32px);
     font-weight: 300;
-    color: #f0ede8;
+    color
     line-height: 1.6;
     margin-bottom: 0.6rem;
   }
@@ -524,15 +525,13 @@
   .share-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: #fff;
-    border: 1px solid #ebebeb;
-    border-radius: 14px;
-    padding: 13px 15px;
+    justify-content: center;
+    gap: 14px;
+    padding: 10px 4px;
     margin-bottom: 1.5rem;
   }
   .share-row-text {
+    flex: 1;
     font-size: 13px;
     color: #666;
     line-height: 1.5;
@@ -544,10 +543,10 @@
     margin-bottom: 2px;
   }
   .icon-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    border: 1px solid #ebebeb;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
     background: #fff;
     display: flex;
     align-items: center;
@@ -711,7 +710,7 @@
       <div class="quiz-tags" id="quiz-tags"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:12px;">
         <div class="q-counter" id="q-counter"></div>
-        <button id="back-btn" onclick="goPrevQuestion()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:none;">← 이전 질문</button>
+        <button id="back-btn" onclick="goPrevQuestion()" style="background:none;border:none;color:#8b97a5;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:none;">← 이전 질문</button>
       </div>
       <div class="q-text" id="q-text"></div>
       <div class="answer-options" id="answer-options"></div>
@@ -728,20 +727,6 @@
 
     <div class="result-cards" id="result-cards"></div>
 
-    <div class="share-row detail-share-row">
-      <div class="share-row-text">
-        <strong>상세 결과 공유</strong>
-        선택 과목 추천과 분석을 저장하거나 보내기
-      </div>
-      <button class="icon-btn" onclick="shareDetailResult()" aria-label="상세 결과 공유하기">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 16V4" stroke-linecap="round"/>
-            <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
-          </svg>
-        </button>
-    </div>
-
     <div class="trait-box">
       <div class="box-label">주요 성향</div>
       <div class="trait-list" id="trait-list"></div>
@@ -757,6 +742,20 @@
       최종 선택은 학교 개설 여부, 평가 방식, 담임 선생님 상담을 함께 고려해줘.
     </div>
 
+    <div class="share-row detail-share-row">
+      <button class="icon-btn" onclick="shareDetailResult()" aria-label="선택 결과 공유하기">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16V4" stroke-linecap="round"/>
+          <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="share-row-text" style="flex:none;">
+        <strong>Share</strong>
+        과목 추천과 성향 분석 결과 보내기
+      </div>
+    </div>
+
     <div id="story-card" style="margin-bottom:1.8rem;background:linear-gradient(180deg,#f8fbff 0%,#eef5fc 100%);border-radius:28px;padding:42px 28px;text-align:center;position:relative;overflow:hidden;aspect-ratio:9/16;display:flex;flex-direction:column;justify-content:center;align-items:center;">
       <div style="font-size:11px;letter-spacing:0.28em;color:#7f8da3;margin-bottom:22px;">TEUIDA MATH</div>
       <div id="story-type" style="font-size:34px;font-weight:700;line-height:1.35;color:#1a1a1a;margin-bottom:10px;"></div>
@@ -768,25 +767,26 @@
     </div>
 
     <div class="share-row story-share-row">
-      <div class="share-row-text">
-        <strong>스토리 카드 공유</strong>
-        내 수학 타입만 간단하게 공유하기
-      </div>
       <button class="icon-btn" onclick="shareStoryCard()" aria-label="스토리 카드 공유하기">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 16V4" stroke-linecap="round"/>
-            <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
-          </svg>
-        </button>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16V4" stroke-linecap="round"/>
+          <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="share-row-text" style="flex:none;">
+        <strong>Share</strong>
+        수학 타입 공유하기
+      </div>
     </div>
 
-    <div class="result-actions">
-      <button class="icon-btn" onclick="restart()" aria-label="다시 하기">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+    <div class="result-actions" style="margin-top:1.5rem;">
+      <button class="btn-outline" onclick="restart()" style="min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;">
           <path d="M20 11a8 8 0 1 0-2.34 5.66" stroke-linecap="round"/>
           <path d="M20 4v7h-7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+        Retry
       </button>
     </div>
   </div>
