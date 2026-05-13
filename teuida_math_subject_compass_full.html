@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>트이다 수학 선택 나침반</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f5f5f3;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  /* ── 인트로 ── */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: #0d1130;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  #intro-wordmark {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(13px, 3vw, 15px);
+    font-weight: 400;
+    letter-spacing: 0.45em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  #intro-text {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .phrase {
+    position: absolute;
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(20px, 5vw, 27px);
+    font-weight: 300;
+    color: #f0ede8;
+    text-align: center;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    width: 100%;
+    transition: opacity 0.5s ease;
+  }
+  #intro-skip {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 8px 12px;
+    transition: color 0.2s;
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards 0.8s;
+  }
+  #intro-skip:hover { color: rgba(255,255,255,0.6); }
+  #intro-progress {
+    position: absolute;
+    bottom: 2.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 7px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards 0.8s;
+  }
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.4s;
+  }
+  .dot.active { background: rgba(255,255,255,0.5); }
+  @keyframes fadeIn { to { opacity: 1; } }
+  #intro.leaving { animation: overlayOut 0.7s ease forwards; }
+  @keyframes overlayOut { to { opacity: 0; pointer-events: none; } }
+
+  /* ── 본문 공통 ── */
+  #main { opacity: 0; transition: opacity 0.5s ease 0.1s; }
+  #main.visible { opacity: 1; }
+
+  /* 화면 전환 핵심: ID 선택자의 display 속성이 .screen 숨김을 덮어쓰지 않도록 처리 */
+  .screen:not(.active) { display: none !important; }
+  .screen.active { display: block; }
+
+  /* ── 랜딩 ── */
+  #screen-landing {
+    min-height: 100vh;
+    background: #0d1130;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+  .landing-badge {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+  .landing-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 300;
+    color: #f0ede8;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.2rem;
+  }
+  .landing-title strong { font-weight: 400; color: #fff; }
+  .landing-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    margin-bottom: 3.5rem;
+  }
+  .landing-btn,
+  .btn-primary {
+    background: #185fa5;
+    color: #fff;
+    border: none;
+    padding: 14px 44px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 10px;
+    letter-spacing: 0.04em;
+    transition: background 0.15s;
+  }
+  .landing-btn:hover,
+  .btn-primary:hover:not(:disabled) { background: #0c447c; }
+  .btn-primary:disabled { background: #bbb; cursor: not-allowed; }
+
+  /* ── 과목 선택 ── */
+  #screen-select {
+    padding: 2rem 1rem 4rem;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .page-header {
+    margin-bottom: 2rem;
+    padding-top: 0.5rem;
+  }
+  .page-step {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: #185fa5;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .page-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .page-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.7;
+  }
+  .group-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-left: 2px;
+    margin-top: 1.5rem;
+  }
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .subject-card {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .subject-card:hover {
+    border-color: #185fa5;
+    background: #f0f5fb;
+  }
+  .subject-card.selected {
+    border-color: #185fa5;
+    background: #eef5fc;
+  }
+  .subject-card-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .subject-card-tag {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.5;
+    padding-right: 16px;
+  }
+  .subject-check {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #185fa5;
+    color: #fff;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.15s;
+  }
+  .subject-card.selected .subject-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .select-footer {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .select-count {
+    font-size: 13px;
+    color: #888;
+  }
+  .select-count span { color: #185fa5; font-weight: 500; }
+
+  /* ── 질문 ── */
+  #screen-quiz {
+    min-height: 100vh;
+    background: #0d1130;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+  .quiz-inner { width: 100%; max-width: 520px; }
+  .progress-bar {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 1px;
+    margin-bottom: 3rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #185fa5;
+    border-radius: 1px;
+    transition: width 0.4s ease;
+  }
+  .quiz-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .quiz-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.4);
+  }
+  .q-counter {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 1.5rem;
+  }
+  .q-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(19px, 4vw, 25px);
+    font-weight: 300;
+    color: #f0ede8;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.01em;
+    opacity: 0;
+    animation: fadeUp 0.45s forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .answer-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .answer-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.75);
+    padding: 16px 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.15s;
+    text-align: left;
+    line-height: 1.5;
+    opacity: 0;
+  }
+  .answer-btn:nth-child(1) { animation: fadeUp 0.4s 0.05s forwards; }
+  .answer-btn:nth-child(2) { animation: fadeUp 0.4s 0.12s forwards; }
+  .answer-btn:nth-child(3) { animation: fadeUp 0.4s 0.19s forwards; }
+  .answer-btn:nth-child(4) { animation: fadeUp 0.4s 0.26s forwards; }
+  .answer-btn:hover {
+    border-color: #185fa5;
+    background: rgba(24,95,165,0.15);
+    color: #fff;
+  }
+
+  /* ── 결과 ── */
+  #screen-result {
+    padding: 2rem 1rem 4rem;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .result-top-bar {
+    background: #0d1130;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-radius: 0 0 20px 20px;
+  }
+  .result-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .result-headline {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 300;
+    color: #f0ede8;
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+  }
+  .result-headline strong { font-weight: 400; color: #fff; }
+  .result-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+  }
+  .result-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .result-card {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .result-card.top { border-color: #185fa5; }
+  .result-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .result-rank {
+    font-size: 11px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 0.05em;
+    min-width: 32px;
+  }
+  .result-rank.first { color: #185fa5; }
+  .result-subject-name {
+    font-size: 17px;
+    font-weight: 500;
+    color: #1a1a1a;
+    flex: 1;
+  }
+  .result-pct {
+    font-size: 15px;
+    font-weight: 500;
+    color: #185fa5;
+  }
+  .result-pct.mid { color: #888; }
+  .result-pct.low { color: #bbb; }
+  .score-bar {
+    height: 3px;
+    background: #f0f0f0;
+    margin: 0 16px 14px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    background: #185fa5;
+    border-radius: 2px;
+    width: 0;
+    transition: width 1s ease;
+  }
+  .score-fill.mid { background: #bbb; }
+  .score-fill.low { background: #e0e0e0; }
+  .result-reasons {
+    padding: 0 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .reason-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+  .reason-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #185fa5;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  .reason-dot.dim { background: #ddd; }
+  .trait-box,
+  .ai-box,
+  .note-box {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 1.5rem;
+  }
+  .ai-box { border-left: 3px solid #185fa5; }
+  .box-label,
+  .ai-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: #185fa5;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .ai-text,
+  .note-box {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+  .trait-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .trait-chip {
+    font-size: 12px;
+    color: #555;
+    background: #f5f5f3;
+    border-radius: 999px;
+    padding: 5px 10px;
+  }
+  .result-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-outline {
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid #ebebeb;
+    padding: 12px 24px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.15s;
+  }
+  .btn-outline:hover { border-color: #185fa5; color: #185fa5; }
+
+  @media (max-width: 480px) {
+    .subject-grid { grid-template-columns: 1fr 1fr; }
+    .landing-btn, .btn-primary { width: 100%; }
+    .select-footer { align-items: stretch; }
+    .result-actions button { flex: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 인트로 -->
+<div id="intro">
+  <div id="intro-wordmark">TEUIDA MATH</div>
+  <div id="intro-text">
+    <span class="phrase" id="p0">내가 고를 수학,<br>어디서부터 시작하지?</span>
+    <span class="phrase" id="p1">마침내, 나의 수학이 트인다.</span>
+  </div>
+  <div id="intro-progress">
+    <div class="dot" id="d0"></div>
+    <div class="dot" id="d1"></div>
+  </div>
+  <button id="intro-skip" onclick="skipIntro()">SKIP ›</button>
+</div>
+
+<!-- 본문 -->
+<div id="main">
+
+  <!-- 랜딩 -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-badge">TEUIDA MATH · 수학 선택 나침반</div>
+    <div class="landing-title">
+      2022 개정 수학<br>
+      <strong>뭘 선택해야 할까?</strong>
+    </div>
+    <div class="landing-desc">
+      고민 중인 과목 2~4개를 골라봐.<br>
+      네 성향에 맞는 과목을 찾아줄게.
+    </div>
+    <button class="landing-btn" onclick="goTo('screen-select')">진단 시작하기</button>
+  </div>
+
+  <!-- 과목 선택 -->
+  <div id="screen-select" class="screen">
+    <div class="page-header">
+      <div class="page-step">Step 01</div>
+      <div class="page-title">지금 고민 중인 과목을<br>골라봐</div>
+      <div class="page-desc">2~4개 선택 · 선택한 과목들 사이에서 비교해서 추천해줄게</div>
+    </div>
+
+    <div class="group-label">진로 선택 과목</div>
+    <div class="subject-grid">
+      <div class="subject-card" onclick="toggleSubject(this,'미적분Ⅱ')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">미적분Ⅱ</div>
+        <div class="subject-card-tag">함수형 사고 · 계산 체력</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'기하')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">기하</div>
+        <div class="subject-card-tag">공간 직관 · 증명형</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'경제수학')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">경제 수학</div>
+        <div class="subject-card-tag">경제 · 금융 · 현실 적용</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'인공지능수학')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">인공지능 수학</div>
+        <div class="subject-card-tag">AI · 데이터 · 알고리즘</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'직무수학')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">직무 수학</div>
+        <div class="subject-card-tag">직무 · 생활 · 실용</div>
+      </div>
+    </div>
+
+    <div class="group-label">융합 선택 과목</div>
+    <div class="subject-grid">
+      <div class="subject-card" onclick="toggleSubject(this,'수학과문화')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">수학과 문화</div>
+        <div class="subject-card-tag">예술 · 문화 · 융합</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'실용통계')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">실용 통계</div>
+        <div class="subject-card-tag">데이터 · 분석 · 생활</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'수학과제탐구')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">수학과제 탐구</div>
+        <div class="subject-card-tag">탐구 · 보고서 · 자기주도</div>
+      </div>
+    </div>
+
+    <div class="group-label">고급 과목</div>
+    <div class="subject-grid">
+      <div class="subject-card" onclick="toggleSubject(this,'전문수학')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">전문 수학</div>
+        <div class="subject-card-tag">심화 종합 · 이과형</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'이산수학')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">이산 수학</div>
+        <div class="subject-card-tag">논리 · CS · 알고리즘</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'고급대수')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">고급 대수</div>
+        <div class="subject-card-tag">구조 · 선형대수 · 추상</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'고급미적분')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">고급 미적분</div>
+        <div class="subject-card-tag">심화 미적분 · 계산 체력</div>
+      </div>
+      <div class="subject-card" onclick="toggleSubject(this,'고급기하')">
+        <div class="subject-check">✓</div>
+        <div class="subject-card-name">고급 기하</div>
+        <div class="subject-card-tag">공간 · 증명 · 심화</div>
+      </div>
+    </div>
+
+    <div class="select-footer">
+      <div class="select-count"><span id="count">0</span>개 선택됨 (2~4개)</div>
+      <button class="btn-primary" id="btn-next" onclick="startQuiz()" disabled>다음 단계 →</button>
+    </div>
+  </div>
+
+  <!-- 질문 -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-inner">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="quiz-tags" id="quiz-tags"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:12px;">
+        <div class="q-counter" id="q-counter"></div>
+        <button id="back-btn" onclick="goPrevQuestion()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:none;">← 이전 질문</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="answer-options" id="answer-options"></div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div id="screen-result" class="screen">
+    <div class="result-top-bar">
+      <div class="result-eyebrow">TEUIDA MATH · 선택 나침반 결과</div>
+      <div class="result-headline" id="result-headline">분석 중...</div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+
+    <div class="result-cards" id="result-cards"></div>
+
+    <div class="trait-box">
+      <div class="box-label">주요 성향</div>
+      <div class="trait-list" id="trait-list"></div>
+    </div>
+
+    <div class="ai-box">
+      <div class="ai-label">종합 분석</div>
+      <div class="ai-text" id="ai-text"></div>
+    </div>
+
+    <div class="note-box">
+      이 결과는 성향 진단을 바탕으로 한 참고 자료야.<br>
+      최종 선택은 학교 개설 여부, 평가 방식, 담임 선생님 상담을 함께 고려해줘.
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-primary" onclick="saveResultImage()">결과 이미지 저장</button>
+      <button class="btn-outline" onclick="shareInstagramStory()">인스타 스토리 공유</button>
+      <button class="btn-outline" onclick="restart()">다시 해보기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// 1. 성향 축
+// ============================================================
+const TRAITS = [
+  '계산지속력',
+  '함수사고',
+  '공간직관',
+  '논리증명',
+  '데이터분석',
+  '탐구자기주도',
+  '현실응용',
+  '창의융합',
+  '도전성향',
+  '디지털AI'
+];
+
+// ============================================================
+// 2. 과목별 요구 성향 가중치
+// 0: 무관 / 1: 약간 / 2: 중요 / 3: 매우 중요
+// ============================================================
+const SUBJECTS = {
+  '미적분Ⅱ': {
+    label: '미적분Ⅱ',
+    traits: { 계산지속력: 3, 함수사고: 3, 논리증명: 1, 도전성향: 2, 현실응용: 1 },
+    summary: '함수의 변화 흐름을 깊게 보고, 긴 계산을 끝까지 밀고 가는 힘이 중요한 과목이야.'
+  },
+  '기하': {
+    label: '기하',
+    traits: { 공간직관: 3, 논리증명: 3, 도전성향: 2, 계산지속력: 1 },
+    summary: '공간을 머릿속으로 그려보고, 도형의 성질을 논리적으로 따지는 힘이 중요한 과목이야.'
+  },
+  '경제수학': {
+    label: '경제 수학',
+    traits: { 현실응용: 3, 함수사고: 2, 데이터분석: 1, 계산지속력: 1 },
+    summary: '수학이 경제와 금융 상황에서 어떻게 쓰이는지 보는 현실 응용형 과목이야.'
+  },
+  '인공지능수학': {
+    label: '인공지능 수학',
+    traits: { 디지털AI: 3, 데이터분석: 3, 현실응용: 2, 탐구자기주도: 1, 창의융합: 1 },
+    summary: '데이터, 알고리즘, AI의 판단 방식을 수학적으로 이해하는 응용형 과목이야.'
+  },
+  '직무수학': {
+    label: '직무 수학',
+    traits: { 현실응용: 3, 데이터분석: 1, 계산지속력: 1 },
+    summary: '직업과 생활 장면에서 필요한 수학을 실용적으로 다루는 과목이야.'
+  },
+  '수학과문화': {
+    label: '수학과 문화',
+    traits: { 창의융합: 3, 현실응용: 1, 탐구자기주도: 2, 공간직관: 1 },
+    summary: '수학을 예술, 문화, 역사, 사회와 연결해보는 융합형 과목이야.'
+  },
+  '실용통계': {
+    label: '실용 통계',
+    traits: { 데이터분석: 3, 현실응용: 2, 탐구자기주도: 1 },
+    summary: '자료를 모으고 해석해서 현실적인 판단으로 연결하는 데이터 중심 과목이야.'
+  },
+  '수학과제탐구': {
+    label: '수학과제 탐구',
+    traits: { 탐구자기주도: 3, 창의융합: 2, 논리증명: 1, 데이터분석: 1, 도전성향: 1 },
+    summary: '스스로 주제를 잡고 조사·탐구·정리하는 자기주도형 과목이야.'
+  },
+  '전문수학': {
+    label: '전문 수학',
+    traits: { 계산지속력: 2, 함수사고: 2, 공간직관: 2, 논리증명: 2, 데이터분석: 1, 도전성향: 2 },
+    summary: '미적분, 기하, 확률과 통계를 폭넓게 심화하는 종합형 과목이야.'
+  },
+  '이산수학': {
+    label: '이산 수학',
+    traits: { 논리증명: 3, 디지털AI: 2, 데이터분석: 2, 탐구자기주도: 1 },
+    summary: '논리, 경우, 알고리즘처럼 컴퓨터 과학과 가까운 사고를 다루는 과목이야.'
+  },
+  '고급대수': {
+    label: '고급 대수',
+    traits: { 논리증명: 3, 함수사고: 2, 계산지속력: 2, 디지털AI: 2, 데이터분석: 1, 도전성향: 2 },
+    summary: '벡터공간, 선형변환처럼 구조를 추상적으로 이해하는 힘이 중요한 과목이야.'
+  },
+  '고급미적분': {
+    label: '고급 미적분',
+    traits: { 계산지속력: 3, 함수사고: 3, 논리증명: 2, 도전성향: 3 },
+    summary: '미적분을 더 깊고 길게 밀고 가는 과목이라 함수 이해와 계산 체력이 모두 필요해.'
+  },
+  '고급기하': {
+    label: '고급 기하',
+    traits: { 공간직관: 3, 논리증명: 3, 도전성향: 3, 계산지속력: 1 },
+    summary: '공간 감각과 증명형 사고를 더 높은 수준으로 요구하는 심화 기하 과목이야.'
+  }
+};
+
+// ============================================================
+// 3. 질문 데이터
+// reverse: true면 역문항. 사용자가 3점으로 답하면 실제 점수는 0점 처리.
+// ============================================================
+const ALL_QUESTIONS = [
+  { id: 1, trait: '계산지속력', reverse: false, text: '계산이 길어져도 끝까지 집중할 수 있는 편이다' },
+  { id: 2, trait: '계산지속력', reverse: false, text: '복잡한 식을 정리하다 보면 오히려 몰입될 때가 있다' },
+  { id: 3, trait: '계산지속력', reverse: true, text: '계산이 많아 보이면 시작도 하기 전부터 피곤하다' },
+  { id: 4, trait: '계산지속력', reverse: false, text: '문제를 틀려도 계산 과정을 다시 보는 건 크게 안 귀찮다' },
+  { id: 5, trait: '계산지속력', reverse: false, text: '여러 단계를 차근차근 밀어가는 문제에 강한 편이다' },
+  { id: 6, trait: '계산지속력', reverse: true, text: '계산 실수 때문에 아는 문제를 자주 틀린다' },
+
+  { id: 7, trait: '함수사고', reverse: false, text: '그래프를 보면 어디서 어떻게 변하는지가 먼저 눈에 들어온다' },
+  { id: 8, trait: '함수사고', reverse: false, text: '식만 보는 것보다 그래프로 보면 이해가 더 잘 된다' },
+  { id: 9, trait: '함수사고', reverse: false, text: '함수 문제는 계산보다 흐름 이해가 더 중요하다고 느낀다' },
+  { id: 10, trait: '함수사고', reverse: true, text: '그래프가 복잡해지면 갑자기 흐름이 끊긴다' },
+  { id: 11, trait: '함수사고', reverse: false, text: '함수 문제를 풀 때 전체 흐름부터 보려는 편이다' },
+  { id: 12, trait: '함수사고', reverse: false, text: '그래프 이동이나 변화가 직관적으로 느껴지는 편이다' },
+
+  { id: 13, trait: '공간직관', reverse: false, text: '도형 문제는 그림을 직접 그리면 훨씬 잘 풀린다' },
+  { id: 14, trait: '공간직관', reverse: false, text: '입체도형은 머릿속으로 상상하는 게 어렵지 않다' },
+  { id: 15, trait: '공간직관', reverse: true, text: '도형 문제는 어디를 봐야 할지 막막할 때가 많다' },
+  { id: 16, trait: '공간직관', reverse: false, text: '도형은 식보다 그림이 먼저 떠오르는 편이다' },
+  { id: 17, trait: '공간직관', reverse: false, text: '평면도형보다 공간도형이 더 재밌게 느껴진다' },
+  { id: 18, trait: '공간직관', reverse: false, text: '도형 문제를 풀다 보면 머릿속에서 움직이는 느낌이 있다' },
+
+  { id: 19, trait: '논리증명', reverse: false, text: '답만 맞는 것보다 왜 그렇게 되는지가 이해돼야 마음이 편하다' },
+  { id: 20, trait: '논리증명', reverse: false, text: '풀이 과정을 하나씩 연결해가는 게 재밌다' },
+  { id: 21, trait: '논리증명', reverse: true, text: '“그냥 외우면 안 되나?” 싶은 순간이 많다' },
+  { id: 22, trait: '논리증명', reverse: false, text: '풀이가 논리적으로 깔끔한지도 신경 쓰는 편이다' },
+  { id: 23, trait: '논리증명', reverse: false, text: '증명 문제는 답답하기보다는 퍼즐 같다고 느껴진다' },
+  { id: 24, trait: '논리증명', reverse: false, text: '문제를 풀고 나면 왜 이 방법이 되는지도 다시 생각해보는 편이다' },
+
+  { id: 25, trait: '데이터분석', reverse: false, text: '표나 그래프를 보면 숫자 변화 이유가 궁금해진다' },
+  { id: 26, trait: '데이터분석', reverse: false, text: '데이터를 정리해서 비교하는 과정이 생각보다 재밌다' },
+  { id: 27, trait: '데이터분석', reverse: false, text: '경우를 나눠서 생각하는 게 크게 어렵지 않다' },
+  { id: 28, trait: '데이터분석', reverse: true, text: '확률 문제는 애매해서 답답하게 느껴진다' },
+  { id: 29, trait: '데이터분석', reverse: false, text: '뉴스나 통계를 볼 때 숫자 근거를 보게 되는 편이다' },
+  { id: 30, trait: '데이터분석', reverse: false, text: '자료를 보고 패턴 찾는 게 재밌다' },
+
+  { id: 31, trait: '탐구자기주도', reverse: false, text: '정답이 바로 안 나와도 혼자 계속 붙잡고 있는 편이다' },
+  { id: 32, trait: '탐구자기주도', reverse: false, text: '궁금한 건 시키지 않아도 찾아보는 편이다' },
+  { id: 33, trait: '탐구자기주도', reverse: true, text: '자유롭게 탐구하라고 하면 오히려 막막하다' },
+  { id: 34, trait: '탐구자기주도', reverse: false, text: '한 문제를 여러 방식으로 풀어보는 걸 좋아한다' },
+  { id: 35, trait: '탐구자기주도', reverse: false, text: '문제를 풀다가 다른 방법이 궁금해질 때가 있다' },
+  { id: 36, trait: '탐구자기주도', reverse: true, text: '정해진 풀이만 반복하면 금방 질리는 편이다' },
+
+  { id: 37, trait: '현실응용', reverse: false, text: '수학을 배우면 “이걸 어디에 쓰지?”라는 생각이 자주 든다' },
+  { id: 38, trait: '현실응용', reverse: false, text: '현실 문제를 수학으로 설명하는 게 흥미롭다' },
+  { id: 39, trait: '현실응용', reverse: false, text: '순수 계산보다 실제 사례가 있는 문제가 더 기억에 남는다' },
+  { id: 40, trait: '현실응용', reverse: false, text: '수학이 경제·기술·사회와 연결되는 게 재밌다' },
+  { id: 41, trait: '현실응용', reverse: false, text: '추상적인 개념보다 실제 활용 예시가 있어야 이해가 잘 된다' },
+  { id: 42, trait: '현실응용', reverse: false, text: '실생활과 가까운 문제일수록 더 집중하게 된다' },
+
+  { id: 43, trait: '창의융합', reverse: false, text: '한 가지 정답보다 여러 방식으로 생각하는 게 재밌다' },
+  { id: 44, trait: '창의융합', reverse: false, text: '수학이 예술·AI·사회 같은 다른 분야와 연결되는 게 흥미롭다' },
+  { id: 45, trait: '창의융합', reverse: true, text: '정해진 풀이만 따라가는 건 금방 질린다' },
+  { id: 46, trait: '창의융합', reverse: false, text: '새로운 방식으로 접근하는 문제를 좋아하는 편이다' },
+  { id: 47, trait: '창의융합', reverse: false, text: '답보다 아이디어 자체가 재밌을 때가 있다' },
+  { id: 48, trait: '창의융합', reverse: false, text: '답보다 “어떻게 그런 생각을 했는지”가 궁금해질 때가 있다' },
+
+  { id: 49, trait: '도전성향', reverse: false, text: '조금 어려워도 흥미 있으면 도전해보는 편이다' },
+  { id: 50, trait: '도전성향', reverse: true, text: '새로운 과목보다는 익숙하고 안정적인 선택이 마음 편하다' },
+  { id: 51, trait: '도전성향', reverse: true, text: '내신 부담이 크면 흥미 있어도 고민하게 된다' },
+  { id: 52, trait: '도전성향', reverse: false, text: '처음엔 어려워도 파고들수록 재밌어지는 스타일이다' },
+  { id: 53, trait: '도전성향', reverse: false, text: '잘할 수 있는 과목보다 재밌는 과목이 더 끌릴 때가 있다' },
+  { id: 54, trait: '도전성향', reverse: true, text: '확실한 정답이 보이는 과목이 마음 편하다' },
+
+  { id: 55, trait: '디지털AI', reverse: false, text: 'AI나 데이터 기술 이야기를 들으면 흥미가 생긴다' },
+  { id: 56, trait: '디지털AI', reverse: false, text: '문제를 자동화하거나 효율적으로 해결하는 방식이 재밌다' },
+  { id: 57, trait: '디지털AI', reverse: false, text: '컴퓨터가 어떻게 판단하는지 궁금했던 적이 있다' },
+  { id: 58, trait: '디지털AI', reverse: false, text: '수학을 계산보다 시스템처럼 느낄 때가 있다' },
+  { id: 59, trait: '디지털AI', reverse: false, text: '패턴을 규칙처럼 정리하는 걸 좋아한다' },
+  { id: 60, trait: '디지털AI', reverse: false, text: '코딩이나 알고리즘 이야기가 생각보다 재밌다' }
+];
+
+const ANSWER_OPTIONS = [
+  { text: '매우 그렇다', score: 3 },
+  { text: '그런 편이다', score: 2 },
+  { text: '아닌 편이다', score: 1 },
+  { text: '전혀 아니다', score: 0 }
+];
+
+// ============================================================
+// 4. 상태값
+// ============================================================
+let selectedSubjects = [];
+let currentQuestions = [];
+let currentQIdx = 0;
+let traitScores = {};
+let traitCounts = {};
+let lastScores = [];
+let answerHistory = [];
+
+// ============================================================
+// 5. 인트로
+// ============================================================
+let timers = [];
+let skipped = false;
+
+function runIntro() {
+  const wordmark = document.getElementById('intro-wordmark');
+  const p0 = document.getElementById('p0');
+  const p1 = document.getElementById('p1');
+  const d0 = document.getElementById('d0');
+  const d1 = document.getElementById('d1');
+
+  timers.push(setTimeout(() => {
+    if (skipped) return;
+    wordmark.style.opacity = 1;
+    p0.style.opacity = 1;
+    d0.classList.add('active');
+  }, 300));
+
+  timers.push(setTimeout(() => {
+    if (skipped) return;
+    p0.style.opacity = 0;
+    d0.classList.remove('active');
+  }, 1700));
+
+  timers.push(setTimeout(() => {
+    if (skipped) return;
+    p1.style.opacity = 1;
+    d1.classList.add('active');
+  }, 2000));
+
+  timers.push(setTimeout(() => {
+    if (skipped) return;
+    finishIntro();
+  }, 3400));
+}
+
+function finishIntro() {
+  const intro = document.getElementById('intro');
+  intro.classList.add('leaving');
+  setTimeout(() => {
+    intro.style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+  }, 700);
+}
+
+function skipIntro() {
+  skipped = true;
+  timers.forEach(clearTimeout);
+  finishIntro();
+}
+
+runIntro();
+
+// ============================================================
+// 6. 화면 전환 및 선택
+// ============================================================
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleSubject(el, name) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    selectedSubjects = selectedSubjects.filter(subject => subject !== name);
+  } else {
+    if (selectedSubjects.length >= 4) return;
+    el.classList.add('selected');
+    selectedSubjects.push(name);
+  }
+
+  document.getElementById('count').textContent = selectedSubjects.length;
+  document.getElementById('btn-next').disabled = selectedSubjects.length < 2;
+}
+
+// ============================================================
+// 7. 질문 선택 로직
+// 선택 과목의 가중치 합산 → 중요한 trait 추출 → trait별 질문 선택
+// ============================================================
+function pickQuestionsBySelectedSubjects(subjects) {
+  const traitImportance = {};
+
+  subjects.forEach(subjectName => {
+    const subject = SUBJECTS[subjectName];
+    if (!subject) return;
+
+    Object.entries(subject.traits).forEach(([trait, weight]) => {
+      traitImportance[trait] = (traitImportance[trait] || 0) + weight;
+    });
+  });
+
+  const importantTraits = Object.entries(traitImportance)
+    .sort((a, b) => b[1] - a[1])
+    .map(([trait]) => trait)
+    .slice(0, 6);
+
+  const picked = [];
+
+  importantTraits.forEach(trait => {
+    const candidates = ALL_QUESTIONS.filter(q => q.trait === trait);
+    const normalQuestions = candidates.filter(q => !q.reverse);
+    const reverseQuestions = candidates.filter(q => q.reverse);
+
+    const normal = normalQuestions[picked.length % normalQuestions.length];
+    const reverse = reverseQuestions[0];
+
+    if (normal) picked.push(normal);
+    if (reverse && picked.length < 10) picked.push(reverse);
+  });
+
+  return picked.slice(0, 8);
+}
+
+function startQuiz() {
+  answerHistory = [];
+  currentQuestions = pickQuestionsBySelectedSubjects(selectedSubjects);
+  currentQIdx = 0;
+  traitScores = {};
+  traitCounts = {};
+
+  TRAITS.forEach(trait => {
+    traitScores[trait] = 0;
+    traitCounts[trait] = 0;
+  });
+
+  const tagsEl = document.getElementById('quiz-tags');
+  tagsEl.innerHTML = selectedSubjects.map(subject => {
+    return `<span class="quiz-tag">${SUBJECTS[subject].label}</span>`;
+  }).join('');
+
+  goTo('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQuestions[currentQIdx];
+  const total = currentQuestions.length;
+
+  document.getElementById('progress-fill').style.width = ((currentQIdx / total) * 100) + '%';
+  document.getElementById('q-counter').textContent = `질문 ${currentQIdx + 1} / ${total}`;
+
+  const backBtn = document.getElementById('back-btn');
+  backBtn.style.display = currentQIdx > 0 ? 'block' : 'none';
+
+  const qText = document.getElementById('q-text');
+  qText.style.animation = 'none';
+  qText.offsetHeight;
+  qText.style.animation = '';
+  qText.textContent = q.text;
+
+  const optEl = document.getElementById('answer-options');
+  optEl.innerHTML = ANSWER_OPTIONS.map(option => {
+    return `<button class="answer-btn" onclick="selectAnswer(${option.score})">${option.text}</button>`;
+  }).join('');
+}
+
+function selectAnswer(rawScore) {
+  const q = currentQuestions[currentQIdx];
+  const finalScore = q.reverse ? 3 - rawScore : rawScore;
+
+  answerHistory.push({
+    questionIndex: currentQIdx,
+    trait: q.trait,
+    score: finalScore
+  });
+
+  traitScores[q.trait] += finalScore;
+  traitCounts[q.trait] += 1;
+
+  currentQIdx++;
+
+  if (currentQIdx >= currentQuestions.length) {
+    normalizeTraitScores();
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function goPrevQuestion() {
+  if (currentQIdx <= 0) return;
+
+  const lastAnswer = answerHistory.pop();
+
+  if (lastAnswer) {
+    traitScores[lastAnswer.trait] -= lastAnswer.score;
+    traitCounts[lastAnswer.trait] -= 1;
+  }
+
+  currentQIdx--;
+  renderQuestion();
+}
+
+function normalizeTraitScores() {
+  TRAITS.forEach(trait => {
+    if (traitCounts[trait] > 0) {
+      traitScores[trait] = traitScores[trait] / traitCounts[trait];
+    } else {
+      traitScores[trait] = 1.5;
+    }
+  });
+}
+
+// ============================================================
+// 8. 점수 계산
+// ============================================================
+function calculateSubjectScore(subjectName) {
+  const subject = SUBJECTS[subjectName];
+  const traits = subject.traits;
+
+  let score = 0;
+  let maxScore = 0;
+
+  Object.entries(traits).forEach(([trait, weight]) => {
+    const userScore = traitScores[trait] ?? 1.5;
+    score += userScore * weight;
+    maxScore += 3 * weight;
+  });
+
+  return Math.round((score / maxScore) * 100);
+}
+
+function getTopTraits(limit = 4) {
+  return Object.entries(traitScores)
+    .filter(([trait, score]) => score > 1.5)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([trait, score]) => ({ trait, score }));
+}
+
+function getSubjectReasons(subjectName) {
+  const subject = SUBJECTS[subjectName];
+  const traits = Object.entries(subject.traits).sort((a, b) => b[1] - a[1]);
+  const reasons = [];
+
+  traits.forEach(([trait, weight]) => {
+    const score = traitScores[trait] ?? 1.5;
+    if (score >= 2.1) {
+      reasons.push(getPositiveReason(trait));
+    }
+  });
+
+  if (reasons.length === 0) {
+    reasons.push(subject.summary);
+  }
+
+  return reasons.slice(0, 3);
+}
+
+function getPositiveReason(trait) {
+  const map = {
+    계산지속력: '계산이 길어져도 끝까지 밀고 가는 힘이 있어',
+    함수사고: '그래프와 함수의 변화 흐름을 읽는 감각이 있는 편이야',
+    공간직관: '도형을 머릿속으로 그려보는 감각이 잘 맞는 편이야',
+    논리증명: '답만 맞히기보다 왜 그런지 따지는 성향이 있어',
+    데이터분석: '자료와 숫자에서 패턴을 찾는 데 흥미가 있는 편이야',
+    탐구자기주도: '스스로 궁금한 걸 파고드는 힘이 있는 편이야',
+    현실응용: '수학이 현실에서 어떻게 쓰이는지에 관심이 있어',
+    창의융합: '한 가지 방식보다 여러 관점으로 보는 걸 좋아하는 편이야',
+    도전성향: '어려워도 흥미가 있으면 도전해보는 성향이 있어',
+    디지털AI: 'AI, 데이터, 알고리즘 같은 디지털 사고와 잘 맞는 편이야'
+  };
+  return map[trait] || `${trait} 성향이 잘 드러났어`;
+}
+
+function showResult() {
+  goTo('screen-result');
+
+  const scores = selectedSubjects.map(subject => ({
+    name: subject,
+    label: SUBJECTS[subject].label,
+    pct: calculateSubjectScore(subject)
+  }));
+
+  scores.sort((a, b) => b.pct - a.pct);
+  lastScores = scores;
+
+  const top = scores[0];
+  document.getElementById('result-headline').innerHTML = `<strong>${top.label}</strong>에<br>가장 가까워`;
+  document.getElementById('result-sub').textContent = `${selectedSubjects.length}개 과목 중 성향과 가까운 순서로 정리했어`;
+
+  renderResultCards(scores);
+  renderTraitChips();
+  renderAnalysis(scores);
+}
+
+function renderResultCards(scores) {
+  const cardsEl = document.getElementById('result-cards');
+
+  cardsEl.innerHTML = scores.map((s, i) => {
+    const fillClass = i === 0 ? '' : (i === 1 ? ' mid' : ' low');
+    const pctClass = i === 0 ? '' : (i === 1 ? ' mid' : ' low');
+    const rankClass = i === 0 ? ' first' : '';
+    const rankText = i === 0 ? '1st' : (i === 1 ? '2nd' : (i + 1) + 'th');
+    const reasons = getSubjectReasons(s.name);
+
+    return `
+      <div class="result-card${i === 0 ? ' top' : ''}" style="animation:fadeUp 0.4s ${i * 0.08}s both">
+        <div class="result-card-header">
+          <span class="result-rank${rankClass}">${rankText}</span>
+          <span class="result-subject-name">${s.label}</span>
+          <span class="result-pct${pctClass}">${s.pct}%</span>
+        </div>
+        <div class="score-bar"><div class="score-fill${fillClass}" id="fill-${i}"></div></div>
+        <div class="result-reasons">
+          ${reasons.map(reason => `
+            <div class="reason-row">
+              <div class="reason-dot${i > 0 ? ' dim' : ''}"></div>
+              <span>${reason}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  setTimeout(() => {
+    scores.forEach((s, i) => {
+      const el = document.getElementById(`fill-${i}`);
+      if (el) el.style.width = s.pct + '%';
+    });
+  }, 300);
+}
+
+function renderTraitChips() {
+  const topTraits = getTopTraits(5);
+  const traitList = document.getElementById('trait-list');
+
+  if (topTraits.length === 0) {
+    traitList.innerHTML = '<span class="trait-chip">균형형</span>';
+    return;
+  }
+
+  traitList.innerHTML = topTraits.map(item => {
+    return `<span class="trait-chip">${item.trait} ${item.score.toFixed(1)}/3</span>`;
+  }).join('');
+}
+
+function renderAnalysis(scores) {
+  const top = scores[0];
+  const second = scores[1];
+  const topTraits = getTopTraits(3).map(item => item.trait);
+
+  let text = '';
+
+  if (topTraits.length > 0) {
+    text += `너는 ${topTraits.join(', ')} 성향이 비교적 잘 드러나는 편이야. `;
+  } else {
+    text += '특정 성향으로 강하게 치우치기보다는 비교적 균형 잡힌 편이야. ';
+  }
+
+  text += `${SUBJECTS[top.name].label}은(는) ${SUBJECTS[top.name].summary} `;
+
+  if (second) {
+    const gap = top.pct - second.pct;
+    if (gap <= 5) {
+      text += `다만 ${SUBJECTS[second.name].label}와의 차이가 크지 않아서, 학교의 실제 평가 방식이나 본인의 흥미를 함께 고려하는 게 좋아.`;
+    } else {
+      text += `선택한 과목들 중에서는 ${SUBJECTS[top.name].label} 쪽이 현재 응답과 가장 자연스럽게 맞아 보여.`;
+    }
+  }
+
+  document.getElementById('ai-text').textContent = text;
+}
+
+// ============================================================
+// 9. 기타 기능
+// ============================================================
+function restart() {
+  selectedSubjects = [];
+  currentQuestions = [];
+  currentQIdx = 0;
+  traitScores = {};
+  traitCounts = {};
+  lastScores = [];
+
+  document.querySelectorAll('.subject-card.selected').forEach(el => el.classList.remove('selected'));
+  document.getElementById('count').textContent = '0';
+  document.getElementById('btn-next').disabled = true;
+  document.getElementById('progress-fill').style.width = '0%';
+
+  goTo('screen-landing');
+}
+
+async function saveResultImage() {
+  alert('추후 html2canvas 연동 시 결과 카드가 이미지로 저장되도록 연결할 수 있어!');
+}
+
+async function shareInstagramStory() {
+  alert('모바일 환경에서는 인스타 스토리 공유 기능으로 연결 가능해!');
+}
+</script>
+</body>
+</html>
