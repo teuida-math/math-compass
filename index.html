@@ -129,16 +129,16 @@
   .landing-title {
     font-family: 'Noto Serif KR', serif;
     font-size: clamp(28px, 6vw, 42px);
-    font-weight: 300;
-    color: #1a1a1a;
-    line-height: 1.7;
+    font-weight: 500;
+    color: #111827;
+    line-height: 1.65;
     letter-spacing: 0.02em;
     margin-bottom: 1.2rem;
   }
   .landing-title strong { font-weight: 500; color: #185fa5; }
   .landing-desc {
     font-size: 13px;
-    color: #777;
+    color: #6f7782;
     line-height: 1.9;
     letter-spacing: 0.02em;
     margin-bottom: 3.5rem;
@@ -189,7 +189,7 @@
   }
   .page-desc {
     font-size: 13px;
-    color: #888;
+    color: #5f6b7a;
     line-height: 1.7;
   }
   .group-label {
@@ -225,7 +225,7 @@
   }
   .subject-card.selected {
     border-color: #185fa5;
-    background: #eef5fc;
+    background: #f6faff;
   }
   .subject-card-name {
     font-size: 15px;
@@ -235,7 +235,7 @@
   }
   .subject-card-tag {
     font-size: 11px;
-    color: #aaa;
+    color: #6b7280;
     line-height: 1.5;
     padding-right: 16px;
   }
@@ -270,7 +270,7 @@
   }
   .select-count {
     font-size: 13px;
-    color: #888;
+    color: #5f6b7a;
   }
   .select-count span { color: #185fa5; font-weight: 500; }
 
@@ -320,7 +320,7 @@
     margin-bottom: 1.5rem;
   }
   .q-text {
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Noto Sans KR', sans-serif;
     font-size: clamp(19px, 4vw, 25px);
     font-weight: 300;
     color: #1a1a1a;
@@ -342,11 +342,11 @@
   .answer-btn {
     background: #ffffff;
     border: 1px solid #e8edf3;
-    color: #444;
+    color: #374151;
     padding: 16px 20px;
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
     border-radius: 10px;
     transition: all 0.15s;
@@ -360,6 +360,8 @@
   .answer-btn:nth-child(4) { animation: fadeUp 0.4s 0.26s forwards; }
   .answer-btn:hover {
     border-color: #185fa5;
+    background: #f3f8fd;
+    color: #0f4c81;
     background: #f3f8fd;
     color: #185fa5;
   }
@@ -379,23 +381,23 @@
   }
   .result-eyebrow {
     font-size: 11px;
-    letter-spacing: 0.3em;
-    color: #8b97a5;
+    letter-spacing: 0.24em;
+    color: #4f5965;
     text-transform: uppercase;
     margin-bottom: 1rem;
   }
   .result-headline {
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Noto Sans KR', sans-serif;
     font-size: clamp(22px, 5vw, 32px);
-    font-weight: 300;
-    color
+    font-weight: 500;
+    color: #1a1a1a;
     line-height: 1.6;
     margin-bottom: 0.6rem;
   }
-  .result-headline strong { font-weight: 400; color: #fff; }
+  .result-headline strong { font-weight: 700; color: #185fa5; }
   .result-sub {
     font-size: 13px;
-    color: rgba(255,255,255,0.35);
+    color: #5f6b7a;
   }
   .result-cards {
     display: flex;
@@ -478,30 +480,43 @@
   }
   .reason-dot.dim { background: #ddd; }
   .trait-box,
-  .ai-box,
-  .note-box {
+  .ai-box {
     background: #fff;
     border: 1px solid #ebebeb;
     border-radius: 14px;
     padding: 18px;
     margin-bottom: 1.5rem;
   }
+  .note-box {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: -0.2rem 0 1.8rem;
+    text-align: center;
+  }
   .ai-box { border-left: 3px solid #185fa5; }
   .box-label,
   .ai-label {
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
     letter-spacing: 0.1em;
     color: #185fa5;
     text-transform: uppercase;
     margin-bottom: 10px;
   }
-  .ai-text,
-  .note-box {
+  .ai-text {
     font-size: 14px;
-    color: #555;
-    line-height: 1.9;
-    font-weight: 300;
+    color: #1f2937;
+    line-height: 1.85;
+    font-weight: 400;
+  }
+  .note-box {
+    font-size: 11px;
+    color: #9aa3ad;
+    line-height: 1.7;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
   .trait-list {
     display: flex;
@@ -526,20 +541,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
+    gap: 18px;
+    transform: translateX(14px);
     padding: 10px 4px;
     margin-bottom: 1.5rem;
   }
   .share-row-text {
-    flex: 1;
+    width: 228px;
     font-size: 13px;
-    color: #666;
+    color: #4f5965;
     line-height: 1.5;
   }
   .share-row-text strong {
     display: block;
     font-size: 14px;
-    color: #1a1a1a;
+    color: #111827;
     margin-bottom: 2px;
   }
   .icon-btn {
@@ -553,7 +569,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s;
-    color: #666;
+    color: #4b5563;
     padding: 0;
   }
   .icon-btn svg {
@@ -738,8 +754,8 @@
     </div>
 
     <div class="note-box">
-      이 결과는 성향 진단을 바탕으로 한 참고 자료야.<br>
-      최종 선택은 학교 개설 여부, 평가 방식, 담임 선생님 상담을 함께 고려해줘.
+      이 결과는 성향 진단을 바탕으로 한 참고 자료입니다.<br>
+      최종 선택은 학교 개설 여부, 평가 방식, 선택 인원 등을 함께 고려해주세요.
     </div>
 
     <div class="share-row detail-share-row">
@@ -750,7 +766,7 @@
           <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
         </svg>
       </button>
-      <div class="share-row-text" style="flex:none;">
+      <div class="share-row-text" style="text-align:left;">
         <strong>Share</strong>
         과목 추천과 성향 분석 결과 보내기
       </div>
@@ -774,20 +790,23 @@
           <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
         </svg>
       </button>
-      <div class="share-row-text" style="flex:none;">
+      <div class="share-row-text" style="text-align:left;">
         <strong>Share</strong>
         수학 타입 공유하기
       </div>
     </div>
 
-    <div class="result-actions" style="margin-top:1.5rem;">
-      <button class="btn-outline" onclick="restart()" style="min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;">
-        <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;">
+    <div class="share-row" style="margin-top:1rem;">
+      <button class="icon-btn" onclick="restart()" aria-label="Retry">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20 11a8 8 0 1 0-2.34 5.66" stroke-linecap="round"/>
           <path d="M20 4v7h-7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Retry
       </button>
+      <div class="share-row-text" style="text-align:left;">
+        <strong>Retry</strong>
+        다시 진단하기
+      </div>
     </div>
   </div>
 
