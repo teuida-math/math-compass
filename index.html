@@ -516,8 +516,29 @@
   }
   .result-actions {
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    gap: 14px;
     flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .icon-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid #ebebeb;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 20px;
+    color: #666;
+  }
+  .icon-btn:hover {
+    border-color: #185fa5;
+    color: #185fa5;
+    transform: translateY(-1px);
   }
   .btn-outline {
     background: #fff;
@@ -704,9 +725,8 @@
     </div>
 
     <div class="result-actions">
-      <button class="btn-primary" onclick="shareResultToMe()">나에게 보내기</button>
-      <button class="btn-outline" onclick="shareInstagramStory()">인스타 스토리 공유</button>
-      <button class="btn-outline" onclick="restart()">다시 해보기</button>
+      <button class="icon-btn" onclick="shareResult()" aria-label="공유하기">➤</button>
+      <button class="icon-btn" onclick="restart()" aria-label="다시 하기">↻</button>
     </div>
   </div>
 
@@ -1418,7 +1438,7 @@ async function saveResultImage() {
   URL.revokeObjectURL(url);
 }
 
-async function shareResultToMe() {
+async function shareResult() {
   const blob = await createResultImageBlob();
   if (!blob) return;
 
@@ -1429,15 +1449,15 @@ async function shareResultToMe() {
     try {
       await navigator.share({
         files: [file],
-        title: '트이다 수학 선택 나침반 결과',
-        text: '나에게 더 잘 맞는 선택 과목 결과를 확인해봤어.'
+        title: '트이다 수학 선택 나침반',
+        text: '나에게 더 잘 맞는 선택 과목은?'
       });
     } catch (error) {
       // 공유 취소 시 조용히 종료
     }
   } else {
     await saveResultImage();
-    alert('이미지를 저장했어. 카카오톡이나 메시지로 직접 보내줘!');
+    alert('이미지를 저장했어. 카카오톡이나 인스타그램에서 직접 공유해줘!');
   }
 }
 
