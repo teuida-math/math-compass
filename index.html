@@ -521,10 +521,32 @@
     flex-wrap: wrap;
     margin-top: 8px;
   }
+  .share-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 14px;
+    padding: 13px 15px;
+    margin-bottom: 1.5rem;
+  }
+  .share-row-text {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .share-row-text strong {
+    display: block;
+    font-size: 14px;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
   .icon-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     border: 1px solid #ebebeb;
     background: #fff;
     display: flex;
@@ -532,8 +554,15 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s;
-    font-size: 20px;
     color: #666;
+    padding: 0;
+  }
+  .icon-btn svg {
+    width: 21px;
+    height: 21px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
   }
   .icon-btn:hover {
     border-color: #185fa5;
@@ -699,6 +728,20 @@
 
     <div class="result-cards" id="result-cards"></div>
 
+    <div class="share-row detail-share-row">
+      <div class="share-row-text">
+        <strong>상세 결과 공유</strong>
+        선택 과목 추천과 분석을 저장하거나 보내기
+      </div>
+      <button class="icon-btn" onclick="shareDetailResult()" aria-label="상세 결과 공유하기">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 16V4" stroke-linecap="round"/>
+            <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
+          </svg>
+        </button>
+    </div>
+
     <div class="trait-box">
       <div class="box-label">주요 성향</div>
       <div class="trait-list" id="trait-list"></div>
@@ -724,9 +767,27 @@
       <div style="position:absolute;bottom:26px;font-size:11px;color:#9aa3ad;letter-spacing:0.08em;">나에게 더 잘 맞는 선택 과목은?</div>
     </div>
 
+    <div class="share-row story-share-row">
+      <div class="share-row-text">
+        <strong>스토리 카드 공유</strong>
+        내 수학 타입만 간단하게 공유하기
+      </div>
+      <button class="icon-btn" onclick="shareStoryCard()" aria-label="스토리 카드 공유하기">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 16V4" stroke-linecap="round"/>
+            <path d="M8 8l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
+          </svg>
+        </button>
+    </div>
+
     <div class="result-actions">
-      <button class="icon-btn" onclick="shareResult()" aria-label="공유하기">➤</button>
-      <button class="icon-btn" onclick="restart()" aria-label="다시 하기">↻</button>
+      <button class="icon-btn" onclick="restart()" aria-label="다시 하기">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 11a8 8 0 1 0-2.34 5.66" stroke-linecap="round"/>
+          <path d="M20 4v7h-7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -1351,19 +1412,24 @@ function restart() {
   goTo('screen-landing');
 }
 
-async function createResultImageBlob() {
-  const target = document.getElementById('screen-result');
-  const actions = document.querySelector('.result-actions');
+async function createImageBlob(targetId, hideSelectors = []) {
+  const target = document.getElementById(targetId);
 
   if (!target || typeof html2canvas === 'undefined') {
     alert('이미지 저장 기능을 불러오지 못했어. 잠시 후 다시 시도해줘.');
     return null;
   }
 
-  // 버튼 영역은 이미지에 나오지 않도록 잠시 숨김
-  if (actions) actions.style.display = 'none';
+  // 캡처에 포함하지 않을 요소 잠시 숨김
+  const hiddenItems = [];
+  hideSelectors.forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      hiddenItems.push({ el, display: el.style.display });
+      el.style.display = 'none';
+    });
+  });
 
-  // 결과 카드 애니메이션 때문에 일부 카드가 투명하게 캡처되는 현상 방지
+  // 애니메이션 때문에 일부 카드가 투명하게 캡처되는 현상 방지
   const animatedEls = target.querySelectorAll('.result-card, .q-text, .answer-btn');
   const originalAnimations = [];
   animatedEls.forEach(el => {
@@ -1378,7 +1444,6 @@ async function createResultImageBlob() {
     el.style.transform = 'none';
   });
 
-  // 모바일에서 화면에 보이는 부분만 잘리는 현상을 막기 위해 전체 높이를 강제로 계산
   const originalOverflow = target.style.overflow;
   const originalHeight = target.style.height;
   const originalMinHeight = target.style.minHeight;
@@ -1413,11 +1478,26 @@ async function createResultImageBlob() {
     item.el.style.transform = item.transform;
   });
 
-  if (actions) actions.style.display = '';
+  hiddenItems.forEach(item => {
+    item.el.style.display = item.display;
+  });
 
   return new Promise(resolve => {
     canvas.toBlob(blob => resolve(blob), 'image/png');
   });
+}
+
+async function createResultImageBlob() {
+  return createImageBlob('screen-result', [
+    '#story-card',
+    '.story-share-row',
+    '.detail-share-row',
+    '.result-actions'
+  ]);
+}
+
+async function createStoryImageBlob() {
+  return createImageBlob('story-card');
 }
 
 async function saveResultImage() {
@@ -1436,6 +1516,59 @@ async function saveResultImage() {
   link.remove();
 
   URL.revokeObjectURL(url);
+}
+
+async function shareDetailResult() {
+  const blob = await createResultImageBlob();
+  if (!blob) return;
+
+  const top = lastScores[0]?.label || 'result';
+  const file = new File([blob], `teuida-math-${top}-detail.png`, { type: 'image/png' });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: '트이다 수학 선택 나침반 상세 결과',
+        text: '나에게 더 잘 맞는 선택 과목 결과를 확인해봤어.'
+      });
+    } catch (error) {
+      // 공유 취소 시 조용히 종료
+    }
+  } else {
+    await saveResultImage();
+    alert('상세 결과 이미지를 저장했어. 카카오톡이나 메시지로 직접 보내줘!');
+  }
+}
+
+async function shareStoryCard() {
+  const blob = await createStoryImageBlob();
+  if (!blob) return;
+
+  const typeName = document.getElementById('story-type')?.textContent || 'type';
+  const file = new File([blob], `teuida-math-${typeName}.png`, { type: 'image/png' });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: '트이다 수학 선택 나침반',
+        text: '내 수학 성향 타입을 확인해봤어.'
+      });
+    } catch (error) {
+      // 공유 취소 시 조용히 종료
+    }
+  } else {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `teuida-math-${typeName}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    alert('스토리 카드를 저장했어. 인스타그램 스토리에서 선택해서 올려줘!');
+  }
 }
 
 async function shareResult() {
